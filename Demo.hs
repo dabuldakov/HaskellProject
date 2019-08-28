@@ -65,6 +65,16 @@ factorial5 n | otherwise = error "abs shoud be > 0"
 helper5 acc 0 = acc
 helper5 acc n = helper5 (acc*n) (n-1)
 
+factorial5' n | n >=0 = 
+  let 
+    helper5' acc 0 = acc
+    helper5' acc n = helper5 (acc*n) (n-1)
+  in helper5' 1 n
+factorial5' n | otherwise = 
+  error "abs shoud be > 0"
+
+
+
 fibonacci6 :: Integer -> Integer
 fibonacci6 n | n >=0 = helper6 0 1 n
 fibonacci6 n | otherwise = helper7 0 1 n
@@ -75,6 +85,54 @@ helper6 acc1 acc2 n = helper6 (acc2) (acc1 + acc2) (n-1)
 helper7 :: Integer -> Integer -> Integer -> Integer
 helper7 acc1 acc2 0 = acc1
 helper7 acc1 acc2 n = helper7 (acc2) (acc1 - acc2) (n+1)
+
+seqA :: Integer -> Integer
+seqA n | n >= 0 = 
+ let 
+	helperSeqA :: Integer -> Integer -> Integer -> Integer -> Integer
+	helperSeqA acc0 acc1 acc2 0 = acc0
+	helperSeqA acc0 acc1 acc2 1 = acc1
+	helperSeqA acc0 acc1 acc2 2 = acc2
+	helperSeqA acc0 acc1 acc2 n = helperSeqA acc1 acc2 (acc2 + acc1 - 2 * acc0) (n-1)
+ in helperSeqA 1 2 3 n
+seqA n | otherwise = error "abs shoud be >= 0"
+
+
+
+
+roots a b c = 
+ (
+  (-b - sqrt(b^2 - 4*a*c)) / (2*a)
+ ,
+  (-b + sqrt(b^2 - 4*a*c)) / (2*a) 
+ )
+
+roots' a b c = let {d = sqrt(b^2 - 4*a*c); twice = (2*a)} in
+ (
+   (-b - d) / twice
+  ,  
+   (-b + d) / twice
+ )
+
+roots'' a b c = 
+ let
+    d = sqrt(b^2 - 4*a*c)
+    twice = 2*a
+    x1 = (-b - d) / twice
+    x2 = (-b + d) / twice
+ in (x1, x2)
+
+rootsDif a b c = 
+  let
+    (x1, x2) = roots'' a b c
+  in x2 - x1
+
+
+
+
+
+
+
 
 
 
