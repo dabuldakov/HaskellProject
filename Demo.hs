@@ -89,11 +89,10 @@ helper7 acc1 acc2 n = helper7 (acc2) (acc1 - acc2) (n+1)
 seqA :: Integer -> Integer
 seqA n | n >= 0 = 
  let 
-	helperSeqA :: Integer -> Integer -> Integer -> Integer -> Integer
-	helperSeqA acc0 acc1 acc2 0 = acc0
-	helperSeqA acc0 acc1 acc2 1 = acc1
-	helperSeqA acc0 acc1 acc2 2 = acc2
-	helperSeqA acc0 acc1 acc2 n = helperSeqA acc1 acc2 (acc2 + acc1 - 2 * acc0) (n-1)
+    helperSeqA acc0 acc1 acc2 0 = acc0
+    helperSeqA acc0 acc1 acc2 1 = acc1
+    helperSeqA acc0 acc1 acc2 2 = acc2
+    helperSeqA acc0 acc1 acc2 n = helperSeqA acc1 acc2 (acc2 + acc1 - 2 * acc0) (n-1)
  in helperSeqA 1 2 3 n
 seqA n | otherwise = error "abs shoud be >= 0"
 
