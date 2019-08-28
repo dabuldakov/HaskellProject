@@ -21,3 +21,32 @@ factorial5 n | otherwise = error "abs shoud be > 0"
 
 helper acc 0 = acc
 helper acc n = helper (acc*n) (n-1)
+
+doubleUs x y = doubleMe x + doubleMe y
+doubleMe x = x + x 
+doubleSmallNumber x = (if x > 100 then x else x*2) + 1
+conanO'Brien = "It's a-me, Conan O'Brien!"
+boomBangs xs = [ if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
+
+lucky :: (Integral a) => a -> String  
+lucky 7 = "LUCKY NUMBER SEVEN!"
+lucky 777 = "LUCKY 777"
+lucky x = "Sorry, you're out of luck, pal!"
+
+sayMe :: (Integral a) => a -> String  
+sayMe 1 = "One!"  
+sayMe 2 = "Two!"  
+sayMe 3 = "Three!"  
+sayMe 4 = "Four!"  
+sayMe 5 = "Five!"  
+sayMe x = "Not between 1 and 5" 
+
+factorial :: (Integral a) => a -> a  
+factorial 0 = 1  
+factorial n = n * factorial (n - 1) 
+
+charName :: (String x) => x -> String  
+charName 'a' = "Albert"  
+charName 'b' = "Broseph"  
+charName 'c' = "Cecil"
+charName x = "Another"

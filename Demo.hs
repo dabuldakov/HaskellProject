@@ -65,13 +65,16 @@ factorial5 n | otherwise = error "abs shoud be > 0"
 helper5 acc 0 = acc
 helper5 acc n = helper5 (acc*n) (n-1)
 
-
+fibonacci6 :: Integer -> Integer
 fibonacci6 n | n >=0 = helper6 0 1 n
-fibonacci6 n | otherwise = error "abs shoud be > 0"
+fibonacci6 n | otherwise = helper7 0 1 n
 
 helper6 :: Integer -> Integer -> Integer -> Integer
 helper6 acc1 acc2 0 = acc1
 helper6 acc1 acc2 n = helper6 (acc2) (acc1 + acc2) (n-1)
+helper7 :: Integer -> Integer -> Integer -> Integer
+helper7 acc1 acc2 0 = acc1
+helper7 acc1 acc2 n = helper7 (acc2) (acc1 - acc2) (n+1)
 
 
 
