@@ -1,4 +1,4 @@
-doubleMe x = x + x 
+doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
 
 removeNonUppercase :: [Char] -> [Char]  

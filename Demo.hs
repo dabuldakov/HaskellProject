@@ -127,7 +127,20 @@ rootsDif a b c =
     (x1, x2) = roots'' a b c
   in x2 - x1
 
+length' xs = sum [1 | _ <- xs]
 
+
+
+
+sum'n'count x | x > 0 = ((dlina x), (summa 0 (show x) ((dlina x)-1)))
+sum'n'count x | x < 0 = (dlina2 x, 0)
+sum'n'count x | x == 0 = (1,0)
+
+dlina x = length (show x)
+dlina2 x = length (tail (show x))
+
+summa acc x (-1) = acc
+summa acc x n = summa (digitToInt(x !! n) + acc) x (n-1)
 
 
 
