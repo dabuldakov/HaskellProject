@@ -132,16 +132,13 @@ length' xs = sum [1 | _ <- xs]
 
 
 sum'n'count :: Integer -> (Int, Int)
-sum'n'count x | x > 0 = ((dlina x), (summa 0 (show x) ((dlina x)-1)))
-sum'n'count x | x < 0 = (dlina2 x, (summa 0 (tail (show x)) ((dlina2 x)-1)))
-sum'n'count x | x == 0 = (1,0)
+sum'n'count x | x  > 0 = ((summa 0 (show x) (dlina x - 1)), (dlina x))
+sum'n'count x | x  < 0 = sum'n'count (-x)
+sum'n'count x | x == 0 = (0, 1)
 
 dlina x = length (show x)
-dlina2 x = length (tail (show x))
-
-
 summa acc x (-1) = acc
-summa acc x n = summa (digitToInt(x !! n) + acc) x (n-1)
+summa acc x   n  = summa (digitToInt(x !! n) + acc) x (n-1)
 
 
 
