@@ -137,12 +137,11 @@ sum'n'count x | x  < 0 = sum'n'count (-x)
 sum'n'count x | x == 0 = (0, 1)
 
 dlina x = length (show x)
+dlina2 x = length (tail (show x))
+
+
 summa acc x (-1) = acc
-summa acc x   n  = summa (digitToInt(x !! n) + acc) x (n-1)
-
-
-integration :: (Double -> Double) -> Double -> Double -> Double
-integration f a b = funH a b * funSum f a 0 (funH a b) 1
+summa acc x n = summa (digitToInt(x !! n) + acc) x (n-1)
 
 funH :: Double -> Double -> Double
 funH a b = (b - a) / 1000
