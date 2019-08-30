@@ -141,6 +141,28 @@ summa acc x (-1) = acc
 summa acc x   n  = summa (digitToInt(x !! n) + acc) x (n-1)
 
 
+integration :: (Double -> Double) -> Double -> Double -> Double
+integration f a b = funH a b * funSum f a 0 (funH a b) 1
+
+funH :: Double -> Double -> Double
+funH a b = (b - a) / 1000
+
+funSum :: (Double -> Double) -> Double -> Double -> Double -> Int -> Double
+funSum f a acc h 1000 = acc
+funSum f a acc h n = funSum f (a + h) (acc + ((f a + f (a + h))/2)) h (n + 1)   
+
+
+
+integration' :: (Double -> Double) -> Double -> Double -> Double
+integration' f a b = (funH a b) * ((f a + f b)/2 + funSum' f a 0 (funH' a b) 1000)
+
+funH' :: Double -> Double -> Double
+funH' a b = (b - a) / 1000
+
+funSum' :: (Double -> Double) -> Double -> Double -> Double -> Int -> Double
+funSum' f a acc h 0 = acc
+funSum' f a acc h n = funSum' f (a+h) (acc + f (a+h)) h (n-1) 
+
 
 
 

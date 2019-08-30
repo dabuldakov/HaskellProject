@@ -46,3 +46,13 @@ sum'n'count x | x == 0 = (1,0)
     sum' acc x 0 = acc
     sum' acc x n = sum' ((x !! n) + acc) (n-1) 
 
+integration :: (Double -> Double) -> Double -> Double -> Double
+integration f a b = (funH a b) * ((f a + f b)/2 + funSum f a 0 (funH a b) 500000)
+
+funH :: Double -> Double -> Double
+funH a b = (b - a) / 500000
+
+funSum :: (Double -> Double) -> Double -> Double -> Double -> Int -> Double
+funSum f a acc h 0 = acc
+funSum f a acc h n = funSum f (a+h) (acc + f (a+h)) h (n-1) 
+
