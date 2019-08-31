@@ -1,6 +1,7 @@
 module Demo where
 
 import Data.Char
+import Data.Function
 
 infixl 6 *+*
 
@@ -143,28 +144,35 @@ dlina2 x = length (tail (show x))
 summa acc x (-1) = acc
 summa acc x n = summa (digitToInt(x !! n) + acc) x (n-1)
 
-funH :: Double -> Double -> Double
-funH a b = (b - a) / 1000
 
-funSum :: (Double -> Double) -> Double -> Double -> Double -> Int -> Double
-funSum f a acc h 1000 = acc
-funSum f a acc h n = funSum f (a + h) (acc + ((f a + f (a + h))/2)) h (n + 1)   
+integration :: (Double -> Double) -> Double -> Double -> Double
+integration f a b = (funH a b) * ((f a + f b)/2 + funSum f a 0 (funH a b) 0)
+
+  where 
+   funH a b = (b - a) / 1000
+   funSum f a acc h 1000 = acc
+   funSum f a acc h n = funSum f (a + h) (acc + f (a + h)) h (n + 1)   
 
 
 
 integration' :: (Double -> Double) -> Double -> Double -> Double
-integration' f a b = (funH a b) * ((f a + f b)/2 + funSum' f a 0 (funH' a b) 1000)
+integration' f a b = h * ((f a + f b)/2 + funSum' 0 1)
 
-funH' :: Double -> Double -> Double
-funH' a b = (b - a) / 1000
+  where 
+   n = 1000
+   h = (b - a) / n
+   funSum' acc 1000 = acc
+   funSum' acc i = funSum' (acc + f (a+h*i)) (i+1) 
 
-funSum' :: (Double -> Double) -> Double -> Double -> Double -> Int -> Double
-funSum' f a acc h 0 = acc
-funSum' f a acc h n = funSum' f (a+h) (acc + f (a+h)) h (n-1) 
+getSecondFrom :: q1 -> q2 -> q3 -> q2
+getSecondFrom x y z = y
 
+apply2 f x = f (f x)
 
+sumSquares = (+) `on` (^2)
 
+multSecond = g `on` h
 
-
-
+g = (*)
+h = snd
 
