@@ -171,8 +171,22 @@ apply2 f x = f (f x)
 
 sumSquares = (+) `on` (^2)
 
-multSecond = g `on` h
+--multSecond = g `on` h
 
-g = (*)
-h = snd
+--g = (*)
+--h = snd
 
+sumFstFst = (+) `on` helper
+ where 
+  helper x = fst $ fst x 
+  
+sumFstFst' = (+) `on` (\x -> fst $ fst x) 
+
+on3 :: (b -> b -> b -> c) -> (a -> b) -> a -> a -> a -> c
+on3 op f x y z = (op) (f x) (f y) (f z)
+
+doItYourself = f . g . h
+
+f = logBase 2
+g = (^3)
+h = max 42
