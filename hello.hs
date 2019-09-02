@@ -1,9 +1,21 @@
-class Printable a where
- (True), (False), (()) :: a -> [Char]
+module Hello where
 
+class Printable a where
+ toString :: a -> [Char]
 
 instance Printable Bool where
-  toSting x = if x == True then "true" else "false"
-  
+ toString True = "true"
+ toString False = "false"
+
 instance Printable () where
-  toSting x = "unit type"
+ toString () = "unit type"
+
+instance (Printable b, Printable c) => Printable (b, c) where
+ toString x = "(" ++ (toString $ fst x) ++ "," ++ (toString $ snd x) ++ ")"
+
+
+
+
+
+  
+

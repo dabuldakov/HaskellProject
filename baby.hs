@@ -53,4 +53,17 @@ charName  x  = "Another"
 
 length'' xs = sum[1 | _ <- xs]
 
+spisok :: [Char] -> [Char]
+spisok x = replace x [] (length x) (x !! (length x)) 
+
+replace :: [Char] -> [Char] -> Int -> Char -> [Char]
+replace list list2 0 '_' = list2
+replace list list2 n 'A' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
+replace list list2 n 'T' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
+replace list list2 n 'G' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
+replace list list2 n 'C' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
+
+spisok' 
+
+
 
