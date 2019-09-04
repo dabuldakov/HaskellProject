@@ -1,4 +1,4 @@
-module Demo where
+module Stepik where
 
 import Data.Char
 import Data.Function
