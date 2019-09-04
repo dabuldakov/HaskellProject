@@ -208,6 +208,21 @@ instance (Printable b, Printable c) => Printable (b, c) where
 
 -----------------------stepik 2.4
 
+class KnownToGork a where
+    stomp :: a -> a
+    doesEnrageGork :: a -> Bool
+
+class KnownToMork a where
+    stab :: a -> a
+    doesEnrageMork :: a -> Bool
+
+class (KnownToGork a, KnownToMork a) => KnownToGorkAndMork a where
+    stompOrStab :: a -> a
+
+------------------------------------------------
+
+ip = show a ++ show b ++ show c ++ show d
+
 data NumChar = NumChar Int [Char]
 
 instance Show NumChar where
@@ -235,4 +250,15 @@ instance SafeEnum Int where
 
 instance SafeEnum Char where
 
+---------------------------------------------
+
+avg :: Int -> Int -> Int -> Double
+avg x y z = (fromInteger (toInteger x + toInteger y + toInteger z))/ 3
+
+const42 :: a -> Int
+const42 = const 42
+
+foo a = a
+bar = const foo
+quux = let x = x in x
 
