@@ -53,17 +53,29 @@ charName  x  = "Another"
 
 length'' xs = sum[1 | _ <- xs]
 
-spisok :: [Char] -> [Char]
-spisok x = replace x [] (length x) (x !! (length x)) 
 
-replace :: [Char] -> [Char] -> Int -> Char -> [Char]
-replace list list2 0 '_' = list2
-replace list list2 n 'A' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
-replace list list2 n 'T' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
-replace list list2 n 'G' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
-replace list list2 n 'C' = replace list (list2 ++ (list !! n)) n (list !! (n-1))
 
-spisok' 
+data Shape = Circle Point Float | Rectangle Point Point 
+ deriving (Show)
+area :: Shape -> Float
+area (Circle _ r) = pi * r^2
+area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
+
+data Point = Point Float Float 
+ deriving (Show)
+ 
+nudge :: Shape -> Float -> Float -> Shape
+nudge (Circle (Point x y) r) a b = Circle (Point (x + a) (y + b)) r
+nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b = Rectangle (Point (x1 + a) (y1 + b)) (Point (x2 + a) (y2 + b))
+ 
+baseCircle :: Float -> Shape 
+baseCircle r = Circle (Point 0 0) r 
+
+baseRect :: Float -> Float -> Shape
+baseRect width heith = Rectangle (Point 0 0) (Point width heith)
+
+
+
 
 
 

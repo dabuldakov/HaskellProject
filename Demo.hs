@@ -191,21 +191,48 @@ f = logBase 2
 g = (^3)
 h = max 42
 
-data Shape = Circle Point Float | Rectangle Point Point 
- deriving (Show)
-area :: Shape -> Float
-area (Circle _ r) = pi * r^2
-area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
+---------------------------------------------
 
-data Point = Point Float Float 
- deriving (Show)
- 
-nudge :: Shape -> Float -> Float -> Shape
-nudge (Circle (Point x y) r) a b = Circle (Point (x + a) (y + b)) r
-nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b = Rectangle (Point (x1 + a) (y1 + b)) (Point (x2 + a) (y2 + b))
- 
-baseCircle :: Float -> Shape 
-baseCircle r = Circle (Point 0 0) r 
+class Printable a where
+ toString :: a -> [Char]
 
-baseRect :: Float -> Float -> Shape
-baseRect width heith = Rectangle (Point 0 0) (Point width heith)
+instance Printable Bool where
+ toString True = "true"
+ toString False = "false"
+
+instance Printable () where
+ toString () = "unit type"
+
+instance (Printable b, Printable c) => Printable (b, c) where
+ toString x = "(" ++ (toString $ fst x) ++ "," ++ (toString $ snd x) ++ ")"
+
+-----------------------stepik 2.4
+
+data NumChar = NumChar Int [Char]
+
+instance Show NumChar where
+ show (NumChar a b) = show a ++ b
+
+a = NumChar 127 "."
+b = NumChar 224 "."
+c = NumChar 120 "."
+d = 12
+
+----------------------------------------
+
+class (Eq a, Enum a, Bounded a) => SafeEnum a where
+  ssucc :: a -> a
+  ssucc x | x == maxBound = minBound
+  ssucc x | otherwise     = succ x
+
+  spred :: a -> a
+  spred x | x == minBound = maxBound
+  spred x | otherwise     = pred x 
+
+instance SafeEnum Bool where
+
+instance SafeEnum Int where
+
+instance SafeEnum Char where
+
+
