@@ -53,8 +53,6 @@ charName  x  = "Another"
 
 length'' xs = sum[1 | _ <- xs]
 
-
-
 data Shape = Circle Point Float | Rectangle Point Point 
  deriving (Show)
 area :: Shape -> Float
