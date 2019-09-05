@@ -83,6 +83,12 @@ getGrade x y z = check ((x + y + z)/3)
 
 -----------Kata: Find numbers which are divisible by given number
 
+divisibleBy :: [Int] -> Int -> [Int]
+divisibleBy list c = [ x | x <- list, (mod x c) == 0]
+
+divisibleBy' :: [Int] -> Int -> [Int]
+divisibleBy' list x = filter (\q -> (mod q x) == 0) list
+
 
 
 
