@@ -131,6 +131,7 @@ rootsDif a b c =
 length' xs = sum [1 | _ <- xs]
 
 
+-------------------------------------
 
 sum'n'count :: Integer -> (Int, Int)
 sum'n'count x | x  > 0 = ((summa 0 (show x) (dlina x - 1)), (dlina x))
@@ -140,10 +141,12 @@ sum'n'count x | x == 0 = (0, 1)
 dlina x = length (show x)
 dlina2 x = length (tail (show x))
 
+--------------------------------------
 
 summa acc x (-1) = acc
 summa acc x n = summa (digitToInt(x !! n) + acc) x (n-1)
 
+--------------------------------------------------------
 
 integration :: (Double -> Double) -> Double -> Double -> Double
 integration f a b = (funH a b) * ((f a + f b)/2 + funSum f a 0 (funH a b) 0)
@@ -153,7 +156,7 @@ integration f a b = (funH a b) * ((f a + f b)/2 + funSum f a 0 (funH a b) 0)
    funSum f a acc h 1000 = acc
    funSum f a acc h n = funSum f (a + h) (acc + f (a + h)) h (n + 1)   
 
-
+-----------------------------------------------------
 
 integration' :: (Double -> Double) -> Double -> Double -> Double
 integration' f a b = h * ((f a + f b)/2 + funSum' 0 1)
@@ -163,6 +166,8 @@ integration' f a b = h * ((f a + f b)/2 + funSum' 0 1)
    h = (b - a) / n
    funSum' acc 1000 = acc
    funSum' acc i = funSum' (acc + f (a+h*i)) (i+1) 
+
+---------------------------------------------------
 
 getSecondFrom :: q1 -> q2 -> q3 -> q2
 getSecondFrom x y z = y
@@ -255,10 +260,29 @@ instance SafeEnum Char where
 avg :: Int -> Int -> Int -> Double
 avg x y z = (fromInteger (toInteger x + toInteger y + toInteger z))/ 3
 
-const42 :: a -> Int
-const42 = const 42
+--------------------------------------------
 
-foo a = a
-bar = const foo
-quux = let x = x in x
+foo 0 x = x
+foo n x = let x' = foo (n - 1) (x + 1)
+          in x' `seq` x'
+
+bar 0 f = f
+bar x f = let f' = \a -> f (x + a)
+              x' = x - 1
+          in f' `seq` x' `seq` bar x' f'
+
+const42 x = 42
+
+swap2 (x,y) = (y,x)
+
+------------------------------------------------
+
+factorialStrong :: Integer -> Integer
+factorialStrong n | n >= 0 = helper 1 n
+                  | otherwise = error "arg show be > 0"
+  where 
+     helper acc 0 = acc
+     helper acc n = (helper $! (acc * n)) (n - 1)
+
+----------------------------------------------------
 
