@@ -89,7 +89,35 @@ divisibleBy list c = [ x | x <- list, (mod x c) == 0]
 divisibleBy' :: [Int] -> Int -> [Int]
 divisibleBy' list x = filter (\q -> (mod q x) == 0) list
 
+-----------Kata: Well of Ideas - Easy Version
 
+well :: [String] -> String
+well x | check > 2 = "I smell a series!"
+       | check >= 1 = "Publish!"
+       | otherwise = "Fail!"
+ where 
+  check = length (filter (`elem` ["good"]) x)
+   
+------------Kata: Fake Binary
+
+fakeBin :: String -> String
+fakeBin = map (\c -> if (read [c] :: Int) < 5 then '0' else '1')
+
+
+fakeBin' :: String -> String
+fakeBin' = map binarize
+  where
+   binarize :: Char -> Char
+   binarize c | c < '5'   = '0'
+              | otherwise = '1'
+   
+fakeBin'' :: String -> String
+fakeBin'' xs = map (mutator '5') xs
+  where
+    mutator :: Char -> Char -> Char
+    mutator threshold value
+        | value < threshold = '0'
+        | otherwise = '1'
 
 
  
