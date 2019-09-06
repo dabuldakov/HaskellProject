@@ -119,5 +119,51 @@ fakeBin'' xs = map (mutator '5') xs
         | value < threshold = '0'
         | otherwise = '1'
 
+------------Is there a vowel in there?
+--a 97 e 101  i 105 o 111 u 117
+
+isVow :: [Int] -> [Either Int String]
+isVow ns = error "y n ocodez?"
+
+
+------------Even or Odd
+
+evenOrOdd :: Integral a => a -> [Char]
+evenOrOdd n | (mod n 2) == 0 = "Even"
+            | otherwise = "Odd"
+
+evenOrOdd' :: Integral a => a -> [Char]
+evenOrOdd' n
+  | even n = "Even"
+  | otherwise = "Odd"
+
+--------------Grasshopper - Personalized Message
+
+greet :: String -> String -> String
+greet name owner | name == owner = "Hello boss"
+                 | otherwise = "Hello guest"
+
+--------------Get Nth Even Number
+
+nthEven :: Int -> Int
+nthEven x | x > 0 = last (take x [0,2..])
+          | x < 0 = -(last (take (-x) [4,6..]))
+          | x == 0 = -2
+
+----------------Convert a Number to a String!
+
+numberToString :: Int -> String
+numberToString = show
+          
+-------------------Bin to Decimal
+
+binToDec :: String -> Integer
+binToDec s = read (reverse (binHelp (read s :: Integer) "")) :: Integer
+ where 
+   binHelp :: Integer -> [Char] -> [Char]
+   binHelp x result | x == 1 = result ++ "1" 
+                    | even x = binHelp (div x 2) (result ++ "0")
+                    | odd x  = binHelp (div x 2) (result ++ "1")
+
 
  
