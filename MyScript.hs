@@ -157,7 +157,7 @@ numberToString = show
           
 -------------------Bin to Decimal
 
-binToDec :: String -> Integer
+decToBin :: String -> Integer
 binToDec s = read (reverse (binHelp (read s :: Integer) "")) :: Integer
  where 
    binHelp :: Integer -> [Char] -> [Char]
@@ -165,5 +165,7 @@ binToDec s = read (reverse (binHelp (read s :: Integer) "")) :: Integer
                     | even x = binHelp (div x 2) (result ++ "0")
                     | odd x  = binHelp (div x 2) (result ++ "1")
 
+binToDec :: String -> Int
+binToDec s = "??"
 
  
