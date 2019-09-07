@@ -115,6 +115,8 @@ roots' a b c = let {d = sqrt(b^2 - 4*a*c); twice = (2*a)} in
    (-b + d) / twice
  )
 
+------------------------
+
 roots'' a b c = 
  let
     d = sqrt(b^2 - 4*a*c)
@@ -123,10 +125,14 @@ roots'' a b c =
     x2 = (-b + d) / twice
  in (x1, x2)
 
+----------------------------
+
 rootsDif a b c = 
   let
     (x1, x2) = roots'' a b c
   in x2 - x1
+  
+--------------------
 
 length' xs = sum [1 | _ <- xs]
 

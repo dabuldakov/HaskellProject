@@ -53,6 +53,8 @@ charName  x  = "Another"
 
 length'' xs = sum[1 | _ <- xs]
 
+-----------------
+
 data Shape = Circle Point Float | Rectangle Point Point 
  deriving (Show)
 area :: Shape -> Float
@@ -72,8 +74,38 @@ baseCircle r = Circle (Point 0 0) r
 baseRect :: Float -> Float -> Shape
 baseRect width heith = Rectangle (Point 0 0) (Point width heith)
 
+-----------------
 
+test0709'1 (x:y:xs) = show x ++ " -- " ++ show y
 
+------------------
+
+test0709'2 line@(x:xs) = "Length: " ++ show (length line) ++ ". First symbol: " ++ [x]
+
+----------------
+
+bmiTell :: Double -> Double -> String 
+bmiTell weight height   
+  | x <= skiny = "distof"   
+  | x <= normal = "norm"   
+  | x <= fat = "fat"   
+  | otherwise = "very fat"
+  where 
+  x = weight / height ^ 2
+  (skiny, normal, fat) = (18.5, 25.0, 30.0)
+
+---------
+
+initials :: String -> String -> String 
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
+ where 
+ (f:_) = firstname 
+ (l:_) = lastname
+ 
+------------
+ 
+calcBmis :: [(Double, Double)] -> [Double] 
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2] 
 
 
 

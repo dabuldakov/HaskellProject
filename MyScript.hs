@@ -1,3 +1,6 @@
+-- :set +s
+
+
 ---------Kata ?
 
 spisok :: [Char] -> [Char]
@@ -158,14 +161,72 @@ numberToString = show
 -------------------Bin to Decimal
 
 decToBin :: String -> Integer
-binToDec s = read (reverse (binHelp (read s :: Integer) "")) :: Integer
+decToBin s = read (reverse (binHelp (read s :: Integer) "")) :: Integer
  where 
    binHelp :: Integer -> [Char] -> [Char]
    binHelp x result | x == 1 = result ++ "1" 
                     | even x = binHelp (div x 2) (result ++ "0")
                     | odd x  = binHelp (div x 2) (result ++ "1")
 
-binToDec :: String -> Int
-binToDec s = "??"
+------------------------------------
 
- 
+binToDec :: String -> Int
+binToDec s = binHelp s ((length s) - 1) 0 (s !! ((length s) - 1))  0
+  where
+   binHelp :: String -> Int -> Int -> Char -> Int -> Int
+   binHelp xs (-1) acc _ step = acc   
+   binHelp xs   n  acc y step = binHelp xs (n-1) (acc + (*) (read [y] :: Int) (2^step)) (xs !! (n-1)) (step + 1)
+
+----------------------------------
+
+binToDec' :: String -> Int
+binToDec' s =  sum (zipWith (\a b -> a * (2 ^ b))(reverse (map (\x -> read [x]::Int) s)) [0..])
+
+---------------------------------------
+
+binToDec'' :: String -> Int
+binToDec'' s =  sum (zipWith (\a b -> read[a] * (2 ^ b))(reverse s) [0..])
+
+---------------------Century From Year
+
+century :: Int -> Int
+century year 
+  | snd x > 0 = fst x + 1
+  | otherwise = fst x
+    where
+    x = divMod year 100
+
+---------------------Expressions Matter 
+
+expression x y z
+   | x == 1 && z == 1 = x + y + z
+   | x >= z = x * (max (y + z) (y * z))
+   | z >= x = z * (max (x + y) (x * y))
+
+------
+expression' a b c = maximum [a+b+c, a*(b+c), a*b*c, a+(b*c), (a+b)*c]
+
+----------------------String repeat
+
+repeatStr :: Int -> String -> String
+repeatStr n str = foldl (\acc x -> acc ++ x) "" str'
+ where 
+  str' = replicate n str
+
+-----------
+repeatStr' n s = concat $ replicate n s
+repeatStr'' n = concat . replicate n
+
+----------------------Count Odd Numbers below n
+oddCount :: Int -> Int 
+oddCount n = length [ c | c <- [1..n], odd c] -1
+oddCount'' n = length [1,3..n] -1
+oddCount' n = div n 2
+
+---------------------Reversed Words
+
+reverseWords :: String -> String 
+reverseWords x = map change x
+ where 
+  change ' ' = ','
+  change c = c
