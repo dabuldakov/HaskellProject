@@ -225,11 +225,10 @@ oddCount' n = div n 2
 
 ---------------------Reversed Words
 
-reverseWords :: String -> [[Char]] 
-reverseWords list = check 1 list [[]] ""
+reverseWords :: String -> [String] 
+reverseWords list = foldl (\acc x -> acc ++ x ++ " ") "" (reverse (check 1 list [] []))
  where 
-  check :: Int -> [Char] -> [[Char]] -> [Char] -> [[Char]]
-  check n [] list' _ = list'
-  check n (x:xs) list' word 
-    | x == ' ' = check 1 xs (list' ++ [word]) "" 
-  check n (x:xs) list' word = check (n+1) xs list' (word ++ [x])
+  check :: Int -> String -> [String] -> String -> [String]
+  check n     []   list' word = list' ++ [word]
+  check n (' ':xs) list' word = check 1 xs (list' ++ [word]) [] 
+  check n   (x:xs) list' word = check (n+1) xs list' (word ++ [x])
