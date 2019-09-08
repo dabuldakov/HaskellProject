@@ -225,8 +225,11 @@ oddCount' n = div n 2
 
 ---------------------Reversed Words
 
-reverseWords :: String -> String 
-reverseWords x = map change x
+reverseWords :: String -> [[Char]] 
+reverseWords list = check 1 list [[]] ""
  where 
-  change ' ' = ','
-  change c = c
+  check :: Int -> [Char] -> [[Char]] -> [Char] -> [[Char]]
+  check n [] list' _ = list'
+  check n (x:xs) list' word 
+    | x == ' ' = check 1 xs (list' ++ [word]) "" 
+  check n (x:xs) list' word = check (n+1) xs list' (word ++ [x])

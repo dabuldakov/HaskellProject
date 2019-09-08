@@ -107,5 +107,81 @@ initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
 calcBmis :: [(Double, Double)] -> [Double] 
 calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2] 
 
+---------------
+
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "empty list"
+maximum' [x] = x
+maximum' (x:xs) = max x (maximum' xs)
+
+--------
+
+replicate' :: Int -> a -> [a]
+replicate' x y 
+  | x <= 0 = []
+  | otherwise = y : (replicate' (x-1) y)
+  
+take' n list
+  | n <=0 = []
+  | list == [] = []
+take' n (x:xs) = x : (take' (n-1) xs)
+
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+repeat' :: a -> [a]
+repeat' x = x: repeat' x
+
+zip' :: [a] -> [b] -> [(a,b)]
+zip' [] _ = []
+zip' _ [] = []
+zip' (x:xs) (y:ys) = (x,y) : (zip' xs ys)
+
+elem' _ [] = False
+elem' n (x:xs)
+   | n == x = True
+   | otherwise = elem' n xs
+
+------------
+
+quickSort :: (Ord a) => [a] -> [a]
+quickSort [] = []
+quickSort (x:xs) = quickSort a ++ [x] ++ quickSort b 
+ where
+  a = filter (\q -> q <= x) xs 
+  b = filter (\q -> q > x) xs
+  
+quickSort' :: (Ord a) => [a] -> [a]
+quickSort' [] = []
+quickSort' (x:xs) = quickSort a ++ [x] ++ quickSort b 
+ where
+  a = [y | y <- xs, y <= x]
+  b = [y | y <- xs, y >  x]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
