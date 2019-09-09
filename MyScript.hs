@@ -1,3 +1,5 @@
+import Data.Char
+import Data.Either
 -- :set +s
 
 
@@ -225,10 +227,84 @@ oddCount' n = div n 2
 
 ---------------------Reversed Words
 
-reverseWords :: String -> [String] 
-reverseWords list = foldl (\acc x -> acc ++ x ++ " ") "" (reverse (check 1 list [] []))
+reverseWords :: String -> String 
+reverseWords list = init (foldl (\acc x -> acc ++ x ++ " ") "" (reverse (check 1 list [] [])))
  where 
   check :: Int -> String -> [String] -> String -> [String]
   check n     []   list' word = list' ++ [word]
-  check n (' ':xs) list' word = check 1 xs (list' ++ [word]) [] 
-  check n   (x:xs) list' word = check (n+1) xs list' (word ++ [x])
+  check n (' ':xs) list' word = check   1   xs (list' ++ [word]) [] 
+  check n   (x:xs) list' word = check (n+1) xs  list' (word ++ [x])
+
+-----------------------
+
+reverseWords' :: String -> String
+reverseWords' = unwords . reverse . words
+-------------------------
+reverseWords'' :: String -> String
+reverseWords'' x = unwords (reverse (words x))
+----------------------------
+--import Data.List
+--reverseWords'' :: String -> String
+--reverseWords'' s = intercalate " " (reverse $ words s)
+
+--------------------Count by X
+
+countBy :: Integer -> Int -> [Integer]
+countBy x n = [x, x+x .. (x* toInteger(n))]
+countBy' x n = take n [x, x + x..]
+countBy'' x n = map (*x) [1..n]
+
+--------------------Difference of Volumes of Cuboids
+
+findDifference :: (Int, Int, Int) -> (Int, Int, Int) -> Int
+findDifference (x, y, z) (a, b, c) = max (x*y*z) (a*b*c) - min (x*y*z) (a*b*c)
+
+---------------------Simple Fun #1: Seats in Theater
+
+seatsBlocked :: Int -> Int -> Int -> Int -> Int
+seatsBlocked tot_cols tot_rows col row = x * y
+ where
+  x = (tot_cols - col +1)
+  y = (tot_rows - row)
+
+---------------------Is the string uppercase?
+
+isUpperCase :: String -> Bool
+isUpperCase []     = True
+isUpperCase (x:xs) = if isLower x then False else isUpperCase xs
+
+---isUpperCase' = not . any (`elem` ['a'..'z'])
+
+---------------------Disemvowel Trolls
+
+disemvowel :: String -> String
+disemvowel = filter (\q -> not (q `elem` vowels'))
+ where
+  vowels = "aeiou" 
+  vowels' = (map toUpper vowels) ++ vowels
+
+disemvowel' = filter (`notElem` "AEIOUaeiou")
+
+----------------------Sum Mixed Array
+
+sumMix :: [Either String Int] -> Int
+sumMix str = sum (rights str) ++ sum (map (\x -> read x :: Int) (lefts str))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
