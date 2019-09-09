@@ -124,13 +124,6 @@ fakeBin'' xs = map (mutator '5') xs
         | value < threshold = '0'
         | otherwise = '1'
 
-------------Is there a vowel in there?
---a 97 e 101  i 105 o 111 u 117
-
-isVow :: [Int] -> [Either Int String]
-isVow ns = error "y n ocodez?"
-
-
 ------------Even or Odd
 
 evenOrOdd :: Integral a => a -> [Char]
@@ -288,9 +281,32 @@ disemvowel' = filter (`notElem` "AEIOUaeiou")
 ----------------------Sum Mixed Array
 
 sumMix :: [Either String Int] -> Int
-sumMix str = sum (rights str) ++ sum (map (\x -> read x :: Int) (lefts str))
+sumMix str = sum (map (\c -> (read c :: Int)) (lefts str)) + sum (rights str)
+----------------------
+sumMix' =sum . map f where
+  f (Left x) = read x :: Int
+  f (Right x) = x
+  
+------------------------Is there a vowel in there?
 
+--a 97 e 101  i 105 o 111 u 117
 
+isVow :: [Int] -> [Either Int String]
+isVow ns = check ns ([] :: [Either Int String])
+ where
+  check [] acc = acc 
+  check (97:xs)  acc = check xs (acc ++ [Right "a"])
+  check (101:xs) acc = check xs (acc ++ [Right "e"])
+  check (105:xs) acc = check xs (acc ++ [Right "i"])
+  check (111:xs) acc = check xs (acc ++ [Right "o"])
+  check (117:xs) acc = check xs (acc ++ [Right "u"])
+  check (x:xs)   acc = check xs (acc ++ [Left x])
+  
+---------------------
+----import Data.Char (chr)
+isVow' = map (\i -> if i `elem` [97,101,105,111,117] then Right [chr i] else Left i)
+
+---------------------------
 
 
 
