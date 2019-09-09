@@ -308,6 +308,11 @@ isVow' = map (\i -> if i `elem` [97,101,105,111,117] then Right [chr i] else Lef
 
 ---------------------------
 
+isVow'' [] = []
+isVow'' (x:xs)
+    | elem toChar "aeiou" = Right [toChar] : isVow xs
+    | otherwise = Left x : isVow xs
+    where toChar = chr x
 
 
 
