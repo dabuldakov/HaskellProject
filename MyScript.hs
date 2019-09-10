@@ -363,8 +363,44 @@ countSheep2 n = cyclon n ""
 
 countSheep2' n = foldr (\x y -> show x ++ " sheep..." ++ y) "" [1..n]
 
-countSheep2'' n = map (\a b -> (show b) ++ " sheep...") [1..n]
+---------------------Square(n) Sum
 
+squareSum :: [Integer] -> Integer
+squareSum xs = sum (map (^2) xs)
+
+squareSum' :: [Integer] -> Integer
+squareSum' xs = sum [c^2 | c <- xs]
+
+squareSum'' :: [Integer] -> Integer       ------ самый быстрый
+squareSum'' = foldr (\x s -> x*x + s) 0  
+
+squareSum''' :: [Integer] -> Integer
+squareSum''' [] = 0
+squareSum''' (x:xs) = x ^ 2 + squareSum xs
+
+---------------------How many lightsabers do you own?
+
+howManyLightsabersDoYouOwn :: Num a => [Char] -> a
+howManyLightsabersDoYouOwn "Zach" = 18
+howManyLightsabersDoYouOwn _ = 0
+
+howManyLightsabersDoYouOwn' :: Num a => [Char] -> a
+howManyLightsabersDoYouOwn' x = case x of 
+  "Zach" -> 18
+  _ -> 0
+
+-------------------Function 1 - hello world
+
+greet2 :: String
+greet2 = map (chr) [104,101,108,108,111,32,119,111,114,108,100,33]
+
+greet2' :: String
+greet2' = foldl (\s x -> s ++ [(chr x)]) "" [104,101,108,108,111,32,119,111,114,108,100,33] 
+
+---------------------Float Precision
+
+solution ::Float -> Float
+solution x = fromIntegral (round (x * 100)) / 100.0
 
 
 
