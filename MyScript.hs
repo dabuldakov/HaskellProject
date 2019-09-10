@@ -402,6 +402,13 @@ greet2' = foldl (\s x -> s ++ [(chr x)]) "" [104,101,108,108,111,32,119,111,114,
 solution ::Float -> Float
 solution x = fromIntegral (round (x * 100)) / 100.0
 
+{-import Text.Printf
+
+solution ::Float -> Float
+solution = read . printf "%.2f"-}
+
+---------------------
+
 
 
 
