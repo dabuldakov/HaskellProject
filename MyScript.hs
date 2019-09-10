@@ -310,15 +310,60 @@ isVow' = map (\i -> if i `elem` [97,101,105,111,117] then Right [chr i] else Lef
 
 isVow'' [] = []
 isVow'' (x:xs)
-    | elem toChar "aeiou" = Right [toChar] : isVow xs
-    | otherwise = Left x : isVow xs
+    | elem toChar "aeiou" = Right [toChar] : isVow'' xs
+    | otherwise = Left x : isVow'' xs
     where toChar = chr x
 
+---------------------You only need one - Beginner
 
+check :: Eq a => [a] -> a -> Bool
+check [] y = False
+check (x:xs) y = if (x == y) then True else check xs y
 
+check' liste element = element `elem` liste
 
+----------------------Is this my tail?
 
+correctTail :: String -> Char -> Bool
+correctTail bod tail = last bod == tail
 
+----------------------Sum Arrays
+
+sum' :: Num a => [a] -> a
+sum' xs = foldl (\acc x -> acc + x) 0 xs
+
+sum'' :: Num a => [a] -> a
+sum'' q = helper q 0
+ where 
+  helper [] acc = acc
+  helper (x:xs) acc = helper xs (acc + x)
+
+----------------------Counting sheep...
+
+countSheep :: [Bool] -> Int
+countSheep xs = length (filter (== True) xs)  ---- быстрее в 3 раза чем вторйо метод
+
+countSheep' :: [Bool] -> Int
+countSheep' xs = length [ c | c <- xs, c == True]
+
+countSheep'' = length . filter (==True)
+
+----------------------Stringy Strings
+
+stringy :: Int -> String
+stringy n = take n (cycle "10")
+
+----------------------If you can't sleep, just count sheep!!
+
+countSheep2 :: Int -> String
+countSheep2 n = cyclon n ""
+  where 
+   cyclon 0 acc = acc
+   cyclon x acc = cyclon (x-1) ((show x) ++ " sheep..." ++ acc)
+
+countSheep2' n = foldr (\x y -> show x ++ " sheep..." ++ y) "" [1..n]
+
+countSheep2'' n = map (\a b -> (show b) ++ " sheep...") [1..n]
 
 
 
