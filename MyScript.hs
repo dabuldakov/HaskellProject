@@ -1,5 +1,6 @@
 import Data.Char
 import Data.Either
+import Data.List.Split
 -- :set +s
 
 
@@ -407,7 +408,99 @@ solution x = fromIntegral (round (x * 100)) / 100.0
 solution ::Float -> Float
 solution = read . printf "%.2f"-}
 
----------------------
+---------------------Largest 5 digit number in a series
+
+digit5 :: String -> Int
+digit5 a = check a 0
+ where
+  check (x:y:z:k:[]) acc = acc
+  check (x:y:z:k:l:xs) acc = check (y:z:k:l:xs) (max (read (x:y:z:k:l:"") :: Int) acc)
+-------------------------
+digit55 :: String -> Int
+digit55 a = check a 0
+ where
+  check (x:y:z:k:[]) acc = acc
+  check ys acc = check (tail ys) (max (read (take 5 ys) :: Int) acc)
+---------------------------  
+digit555 :: String -> Int
+digit555 = maximum . map read . string5
+  where string5 [] = []
+        string5 ys = (take 5 ys):(string5 (tail ys))
+--------------------------------
+digit5' :: String -> Int
+digit5' = maximum . map read . divvy 5 1
+-----------------------------------
+digit5'' :: String -> Int
+digit5'' xs = maximum (map read (divvy 5 1 xs))
+
+------------------------Maximum Multiple
+
+maxMultiple :: Int -> Int -> Int
+maxMultiple x y = (div y x) * x
+
+-------------------------Alphabetical Addition
+
+addLetters :: [Char] -> Char
+addLetters xs = chr (check (sum (map (\a -> ((ord a) - 96)) xs))+ 96)
+ where
+  check a 
+          | a == 0 || (mod a 26) == 0 = 26
+          | otherwise = a - ((div a 26) * 26)
+-----------------------
+
+addLetters' :: [Char] -> Char
+addLetters' xs = snd $ head (getChar getSum)
+ where
+  getChar z | z == 0 || (mod z 26) == 0 = [(0, 'z')]
+            | otherwise = filter (\(a,b) -> (z - ((div z 26) * 26)) == a) list 
+  getSum = sum (map (\q -> if (snd q) `elem` xs then (fst q) else 0) list)
+  list = zip [1..] ['a'..'z']
+
+------------------------Shortest Word
+
+find_shortest :: String -> Integer
+find_shortest = toInteger . minimum . map length . words
+
+------------------------Simple Fun #2: Circle of Numbers
+
+circleOfNumbers :: Int -> Int -> Int
+circleOfNumbers n fn | check - fn == 0 = 0
+                     | check + fn < n = check + fn
+                     | check + fn > n = fn - check
+ where check = div n 2
+
+circleOfNumbers' m i 
+  | i < n = i + n
+  | otherwise = i - n
+  where n = m `div` 2
+---------------------------------
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
