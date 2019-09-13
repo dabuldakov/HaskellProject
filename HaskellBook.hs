@@ -1,3 +1,5 @@
+import Data.Char
+
 doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
 
@@ -158,6 +160,17 @@ quickSort' (x:xs) = quickSort a ++ [x] ++ quickSort b
  where
   a = [y | y <- xs, y <= x]
   b = [y | y <- xs, y >  x]
+
+quickSort'' :: (Ord a) => [a] -> [a]
+quickSort'' [] = []
+quickSort'' (x:xs) = 
+ let 
+  a = quickSort'' (filter (<= x) xs) 
+  b = quickSort'' (filter (> x) xs)
+ in
+  a ++ [x] ++ b 
+
+
   
 ---------------------
 zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
@@ -165,16 +178,33 @@ zipWith' _ [] _ = []
 zipWith' _ _ [] = []
 zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
 
+------------------------
+
 flip' :: (a -> b -> c) -> (b -> a -> c)
 flip' f = q 
  where q x y = f y x 
 
+--------------------------
+
+ld = head (filter p [100000,99999..])
+ where p a = a `mod` 3829 == 0
+
+ss = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+
+ss' = sum (takeWhile (<10000) [m | m <- [n^2 | n <- [1..]], odd m])
 
 
+chain :: Integer -> [Integer]
+chain 1 = [1]
+chain x | odd x = x:chain (x * 3 + 1)
+        | even x = x:chain (x `div` 2)
 
+numLC :: Integer
+numLC = fromIntegral (length (filter isLong (map chain [1..100])))
+ where isLong x = length x > 15
 
-
-
+numLC' :: Integer
+numLC' = fromIntegral (length (filter (\a -> length a > 15) (map chain [1..100])))
 
 
 
