@@ -1,4 +1,5 @@
 import Data.Char
+import Data.List
 
 doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
@@ -206,15 +207,124 @@ numLC = fromIntegral (length (filter isLong (map chain [1..100])))
 numLC' :: Integer
 numLC' = fromIntegral (length (filter (\a -> length a > 15) (map chain [1..100])))
 
+---------------
+---------------------------------Remove duplicate words
 
+removeDuplicateWordsMy :: String -> String
+removeDuplicateWordsMy a = unwords (check (words a) [])
+ where check   []   y = y 
+       check (x:xs) y = if (filter (== x) y) == [] then check xs (y ++ [x]) else check xs y 
 
+removeDuplicateWords :: String -> String
+removeDuplicateWords = unwords . reverse . check . reverse . words
+ where check   []   = [] 
+       check (x:xs) = if x `elem` xs then check xs else x : check xs 
 
+removeDuplicateWords' :: String -> String 
+removeDuplicateWords' = unwords. nub. words 
 
+removeDuplicateWords'' :: String -> String
+removeDuplicateWords'' = unwords . foldl (\acc w -> if w `notElem` acc then acc ++ [w] else acc) [] . words
 
+removeDuplicateWords''' :: String -> String
+removeDuplicateWords''' = unwords . foldl (\a x -> if elem x a then a else a ++ [x]) [] . words
 
+----intercalate " " ["asd", "asd", "a", "sss"] разбивает по нужному имволу 
+-----"asd asd a sss"
 
+----------------Sum of odd numbers
 
+rowSumOddNumbers :: Integer -> Integer
+rowSumOddNumbers x = sum (take (fromIntegral x) (reverse (take (fromIntegral (sum [1..x])) [1,3..])))
 
+rowSumOddNumbers' :: Integer -> Integer
+rowSumOddNumbers' x = sum list
+ where 
+  i = fromIntegral (sum [1..x])
+  xs = take i [1,3..] 
+  list = drop (i - (fromIntegral x)) xs 
+  
+rowSumOddNumbers'' :: Integer -> Integer -------------------самый быстрый
+rowSumOddNumbers'' x = sum list
+ where
+  list = take (fromIntegral x) [first, (first + 2)..] 
+  first = sum (take (fromIntegral (x-1)) [2,4..]) + 1
+  
+rowSumOddNumbers''' :: Integer -> Integer -------------------самый быстрый
+rowSumOddNumbers''' x = sum list
+ where
+  list = [first, (first + 2)..(first + (last k))] 
+  first = sum (k) + 1
+  k = take (fromIntegral (x-1)) [2,4..]
+  
+rowSumOddNumbers'''' :: Integer -> Integer
+rowSumOddNumbers'''' x = x^3
+ 
+---------------------Product Of Maximums Of Array (Array Series #2) 
+
+maxProduct :: [Integer] -> Int -> Integer
+maxProduct list x = product (take x (reverse (quickSort list)))
+
+maxProduct' :: [Integer] -> Int -> Integer
+maxProduct' list x = product (take x (reverse (sort list)))
+
+-------------------Minimize Sum Of Array (Array Series #1) 
+
+minSum :: [Integer] -> Integer
+minSum = sum . check . reverse . sort
+ where 
+  check [] = []
+  check (x:xs) = x * last xs : (check $ init xs)
+
+-------------------Growth of a Population
+
+nbYear :: Int -> Double -> Int -> Int -> Int
+nbYear p0 percent aug p = check (fromIntegral p0) 0
+ where 
+  check :: Double -> Int -> Int
+  check acc n | acc < (fromIntegral p) = check (fromIntegral (truncate (acc * (1 + percent / 100))) + (fromIntegral aug)) (n + 1)
+              | otherwise = n
+
+-----------------Array Leaders (Array Series #3)
+
+arrayLeaders :: [Integer] -> [Integer]
+arrayLeaders [] = []
+arrayLeaders (x:xs) | x > sum xs = x : arrayLeaders xs
+                    |  otherwise = arrayLeaders xs
+    
+----------------Maximum Gap (Array Series #4)
+
+maxGap :: [Int] -> Int
+maxGap = check . reverse . sort
+ where 
+   check   (y:[]) = 0
+   check (x:y:xs) = max (x - y) (check $ y:xs)
+
+maxGap' :: [Int] -> Int
+maxGap' = maximum . diffs . sort
+ where 
+   diffs :: [Int] -> [Int]
+   diffs xs = zipWith (-) (tail xs) (init xs)
+   
+maxGap'' :: [Int] -> Int
+maxGap'' xs = maximum $ zipWith (-) (tail $ sort xs) (sort xs)
+
+-----------------Product Array (Array Series #5)
+
+productArray :: [Integer] -> [Integer]
+productArray x = map (div p) x
+ where p = product x
+
+------------------Maximum Triplet Sum (Array Series #7) 
+
+maxTriSum :: [Integer] -> Integer
+maxTriSum = sum . take 3 . reverse . check . sort
+ where
+  check [] = []
+  check (x:xs) = if (x `elem` xs) then check xs else x : check xs  
+
+maxTriSum' :: [Integer] -> Integer
+maxTriSum' = sum . take 3 . reverse . sort . nub    ------nub убираем дубли
 
 
 

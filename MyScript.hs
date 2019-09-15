@@ -473,10 +473,11 @@ circleOfNumbers' m i
   | i < n = i + n
   | otherwise = i - n
   where n = m `div` 2
+
 ---------------------------------Remove duplicate words
 
 removeDuplicateWords :: String -> String
-removeDuplicateWords = unWords (check words [])
+removeDuplicateWords = unwords (check words [])
  where check   []   y = y 
        check (x:xs) y = if (filter (== x) y) == [] then check xs (y ++ x) else check xs y  
   
