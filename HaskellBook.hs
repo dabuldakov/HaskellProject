@@ -207,7 +207,19 @@ numLC = fromIntegral (length (filter isLong (map chain [1..100])))
 numLC' :: Integer
 numLC' = fromIntegral (length (filter (\a -> length a > 15) (map chain [1..100])))
 
----------------
+
+-----------------Balanced Number (Special Numbers Series #1 ) 
+
+balancedNum' :: Int -> String
+balancedNum' x = if checkOdd then "Balanced" else "Not Balanced"
+ where
+ checkOdd | mod size 2 == 0 = showBalance
+          | otherwise = showBalance1
+ showBalance = (sum $ init $ fst check) == tailList
+ showBalance1 = (sum $ fst check) == tailList
+ tailList = (sum $ tail $ snd check)
+ check = splitAt (div size 2) (map digitToInt $ show x)
+ size = length $ show x
 
 
 
