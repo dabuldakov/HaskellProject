@@ -1,6 +1,7 @@
 import Data.Char
 import Data.Either
 import Data.List.Split
+import Data.List
 -- :set +s
 
 
@@ -474,25 +475,203 @@ circleOfNumbers' m i
   | otherwise = i - n
   where n = m `div` 2
 
+
 ---------------------------------Remove duplicate words
 
-removeDuplicateWords :: String -> String
-removeDuplicateWords = unwords (check words [])
+removeDuplicateWordsMy :: String -> String
+removeDuplicateWordsMy a = unwords (check (words a) [])
  where check   []   y = y 
-       check (x:xs) y = if (filter (== x) y) == [] then check xs (y ++ x) else check xs y  
+       check (x:xs) y = if (filter (== x) y) == [] then check xs (y ++ [x]) else check xs y 
+
+removeDuplicateWords :: String -> String
+removeDuplicateWords = unwords . reverse . check . reverse . words
+ where check   []   = [] 
+       check (x:xs) = if x `elem` xs then check xs else x : check xs 
+
+removeDuplicateWords' :: String -> String 
+removeDuplicateWords' = unwords. nub. words 
+
+removeDuplicateWords'' :: String -> String
+removeDuplicateWords'' = unwords . foldl (\acc w -> if w `notElem` acc then acc ++ [w] else acc) [] . words
+
+removeDuplicateWords''' :: String -> String
+removeDuplicateWords''' = unwords . foldl (\a x -> if elem x a then a else a ++ [x]) [] . words
+
+----intercalate " " ["asd", "asd", "a", "sss"] разбивает по нужному имволу 
+-----"asd asd a sss"
+
+----------------Sum of odd numbers
+
+rowSumOddNumbers :: Integer -> Integer
+rowSumOddNumbers x = sum (take (fromIntegral x) (reverse (take (fromIntegral (sum [1..x])) [1,3..])))
+
+rowSumOddNumbers' :: Integer -> Integer
+rowSumOddNumbers' x = sum list
+ where 
+  i = fromIntegral (sum [1..x])
+  xs = take i [1,3..] 
+  list = drop (i - (fromIntegral x)) xs 
   
+rowSumOddNumbers'' :: Integer -> Integer -------------------самый быстрый
+rowSumOddNumbers'' x = sum list
+ where
+  list = take (fromIntegral x) [first, (first + 2)..] 
+  first = sum (take (fromIntegral (x-1)) [2,4..]) + 1
+  
+rowSumOddNumbers''' :: Integer -> Integer -------------------самый быстрый
+rowSumOddNumbers''' x = sum list
+ where
+  list = [first, (first + 2)..(first + (last k))] 
+  first = sum (k) + 1
+  k = take (fromIntegral (x-1)) [2,4..]
+  
+rowSumOddNumbers'''' :: Integer -> Integer
+rowSumOddNumbers'''' x = x^3
+ 
+---------------------Product Of Maximums Of Array (Array Series #2) 
 
+maxProduct :: [Integer] -> Int -> Integer
+maxProduct list x = product (take x (reverse (quickSort list)))
 
+maxProduct' :: [Integer] -> Int -> Integer
+maxProduct' list x = product (take x (reverse (sort list)))
 
+quickSort :: (Ord a) => [a] -> [a]
+quickSort [] = []
+quickSort (x:xs) = quickSort a ++ [x] ++ quickSort b 
+ where
+  a = filter (\q -> q <= x) xs 
+  b = filter (\q -> q > x) xs
 
+-------------------Minimize Sum Of Array (Array Series #1) 
 
+minSum :: [Integer] -> Integer
+minSum = sum . check . reverse . sort
+ where 
+  check [] = []
+  check (x:xs) = x * last xs : (check $ init xs)
 
+-------------------Growth of a Population
 
+nbYear :: Int -> Double -> Int -> Int -> Int
+nbYear p0 percent aug p = check (fromIntegral p0) 0
+ where 
+  check :: Double -> Int -> Int
+  check acc n | acc < (fromIntegral p) = check (fromIntegral (truncate (acc * (1 + percent / 100))) + (fromIntegral aug)) (n + 1)
+              | otherwise = n
 
+-----------------Array Leaders (Array Series #3)
 
+arrayLeaders :: [Integer] -> [Integer]
+arrayLeaders [] = []
+arrayLeaders (x:xs) | x > sum xs = x : arrayLeaders xs
+                    |  otherwise = arrayLeaders xs
+    
+----------------Maximum Gap (Array Series #4)
 
+maxGap :: [Int] -> Int
+maxGap = check . reverse . sort
+ where 
+   check   (y:[]) = 0
+   check (x:y:xs) = max (x - y) (check $ y:xs)
 
+maxGap' :: [Int] -> Int
+maxGap' = maximum . diffs . sort
+ where 
+   diffs :: [Int] -> [Int]
+   diffs xs = zipWith (-) (tail xs) (init xs)
+   
+maxGap'' :: [Int] -> Int
+maxGap'' xs = maximum $ zipWith (-) (tail $ sort xs) (sort xs)
 
+-----------------Product Array (Array Series #5)
+
+productArray :: [Integer] -> [Integer]
+productArray x = map (div p) x
+ where p = product x
+
+------------------Maximum Triplet Sum (Array Series #7) 
+
+maxTriSum :: [Integer] -> Integer
+maxTriSum = sum . take 3 . reverse . check . sort
+ where
+  check [] = []
+  check (x:xs) = if (x `elem` xs) then check xs else x : check xs  
+
+maxTriSum' :: [Integer] -> Integer
+maxTriSum' = sum . take 3 . reverse . sort . nub    ------nub убираем дубли
+
+----------------------Row Weights
+
+rowWeights :: [Int] -> [Int]
+rowWeights x = 
+ let
+  check _ [] = []
+  check n (x:xs) = if odd n then x : check (n+1) xs else check (n+1) xs
+  acc = sum (check 1 x)
+ in 
+  [acc] ++ [sum x - acc]
+
+rowWeights' :: [Int] -> [Int]
+rowWeights' x = let list = sum $ zipWith (*) x (cycle [1,0])
+                in  [list] ++ [sum x - list]
+
+rowWeights'' :: [Int] -> [Int]
+rowWeights'' [] = [0,0]
+rowWeights'' [x] = [x,0]
+rowWeights'' (x:y:xs) = zipWith (+) [x,y] (rowWeights xs)
+ 
+rowWeights''' :: [Int] -> [Int]
+rowWeights''' list = [sum $ team odd, sum $ team even]
+  where
+    team f = [list !! (x - 1) | x <- [1 .. length list], f x]
+
+---------------Form The Minimum
+
+minValue :: [Int] -> Int
+minValue = read . concat . map show . nub . sort
+
+--minValue' =  read . concatMap show. sort. nub
+
+---------------Minimum Steps (Array Series #6)
+
+minimumSteps :: [Int] -> Int -> Int
+minimumSteps list k = check (sort list) 0
+ where
+  check     [] acc = -1
+  check (x:xs) acc | acc >= k = -1
+                   | otherwise = check xs (acc + x) + 1
+
+minimumSteps' :: [Int] -> Int -> Int
+minimumSteps' xs n = length $ takeWhile (< n) $ scanl1 (+) $ sort xs
+
+---------------Maximum Product 
+
+adjacentElementProduct :: [Integer] -> Integer
+adjacentElementProduct = check
+ where 
+   check   (y:[]) = 0
+   check (x:y:xs) = max (x * y) (check $ y:xs)
+
+adjacentElementProduct' :: [Integer] -> Integer
+adjacentElementProduct' x = maximum $ zipWith (*) x $ tail x 
+
+--------------Nth Smallest Element (Array Series #4) 
+
+nthSmallest :: [Int] -> Int -> Int
+nthSmallest list x = sort list !! (x-1)
+
+---------------Transform To Prime
+
+minimumNumber :: [Integer] -> Integer
+minimumNumber n = check 0 $ sum n
+ where check i k | simpleNumber k = i
+                 | otherwise = check (i+1) (k+1)  
+
+simpleNumber :: Integer -> Bool
+simpleNumber x = not . elem 0 $ map (mod x) [2..k]
+ where 
+  k = truncate . sqrt $ fromIntegral x
 
 
 
