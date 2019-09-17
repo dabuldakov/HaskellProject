@@ -28,6 +28,8 @@ factorial n = if n == 0 then 1 else n * factorial (n-1)
 factorial' 0 = 1
 factorial' n = n * factorial (n-1)
 
+----product $ enumFromTo 1 4 находит факториал
+
 doubleFactorial' 0 = 1
 doubleFactorial' 1 = 1
 doubleFactorial' n = n * doubleFactorial' (n-2)

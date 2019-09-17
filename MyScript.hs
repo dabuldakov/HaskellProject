@@ -2,6 +2,7 @@ import Data.Char
 import Data.Either
 import Data.List.Split
 import Data.List
+import Data.Bool
 -- :set +s
 
 
@@ -673,12 +674,87 @@ simpleNumber x = not . elem 0 $ map (mod x) [2..k]
  where 
   k = truncate . sqrt $ fromIntegral x
 
+-----------------Balanced Number (Special Numbers Series #1 ) 
 
+balancedNum' :: Int -> String
+balancedNum' x = if checkOdd then "Balanced" else "Not Balanced"
+ where
+ checkOdd | mod size 2 == 0 = showBalance
+          | otherwise = showBalance1
+ showBalance = (sum $ init $ fst check) == tailList
+ showBalance1 = (sum $ fst check) == tailList
+ tailList = (sum $ tail $ snd check)
+ check = splitAt (div size 2) (map digitToInt $ show x)
+ size = length $ show x
 
+-----------------STRONGN Strong Number (Special Numbers Series #2) 
 
+strong :: Integer -> String
+strong x = if fromIntegral (sum . map (factorial . digitToInt) $ show x) == x then "STRONG!!!!" else "Not Strong !!"
+ where
+  factorial 0 = 1
+  factorial n = n * factorial (n-1)
 
+------------------Disarium Number (Special Numbers Series #3)
 
+disariumNumber :: Int -> String
+disariumNumber n = if sum (zipWith (\a b -> (digitToInt a) ^ b) (show n) [1..]) == n then "Disarium !!" else "Not !!"
 
+disariumNumber' n =  let s = sum (map (\(x,i) -> (digitToInt x) ^ i) (zip (show n) [1..]))
+                    in if s == n then "Disarium !!" else "Not !!"
+
+------------------Jumping Number (Special Numbers Series #4)
+
+jumpingNumber :: Int -> String
+jumpingNumber x = if abs (product . zipWith (-) s $ tail s) > 1 then "Not!!" else "Jumping!!"
+ where 
+  s = map digitToInt $ show x
+
+------------------Special Number (Special Numbers Series #5)
+
+specialNumber :: Int -> String
+specialNumber x =  if False `elem` (map (`elem` [0..5]) s) then "NOT!!" else "Special!!"
+  where 
+  s = map digitToInt $ show x
+
+specialNumber' n =
+  if all (<= '5') . show $ n
+  then "Special!!" else "NOT!!"
+
+------------------Automorphic Number (Special Numbers Series #6)
+
+automorphic :: Integer -> String
+automorphic x = if any (==False) $ zipWith (==) (reverse $ s x) (reverse $ s $ x^2) then "Not!!" else "Automorphic"
+ where 
+  s y = map digitToInt $ show y
+
+automorphic' n = bool "Not!!" "Automorphic" $ show n `isSuffixOf` show (n^2)
+
+------------------Extra Perfect Numbers (Special Numbers Series #7)
+
+extraPerfect :: Int -> [Int]
+extraPerfect x = filter (/=0) (map (\a -> if (head (decToBin' a)) == (last (decToBin' a)) then a else 0) [1..x])
+
+decToBin' :: Int -> [Char]
+decToBin' s = reverse (binHelp s "")
+ where 
+   binHelp :: Int -> [Char] -> [Char]
+   binHelp x result | x == 1 = result ++ "1" 
+                    | even x = binHelp (div x 2) (result ++ "0")
+                    | odd x  = binHelp (div x 2) (result ++ "1")
+
+-------------------Tidy Number (Special Numbers Series #9)
+
+tidyNumber :: Int -> Bool
+tidyNumber = check . show
+  where  
+   check :: [Char] -> Bool
+   check   (y:[]) = True
+   check (x:y:xs) | x <= y = check $ y:xs
+   check _        | otherwise = False
+
+tidyNumber' :: Int -> Bool
+tidyNumber' x =  and $ zipWith (<=) (show x) (tail $ show x)
 
 
 
