@@ -756,7 +756,47 @@ tidyNumber = check . show
 tidyNumber' :: Int -> Bool
 tidyNumber' x =  and $ zipWith (<=) (show x) (tail $ show x)
 
+------------------Primorial Of a Number 
 
+numPrimorial :: Int -> Integer
+numPrimorial n = product $ take n $ filter (>0) $ map (\a -> if simpleNumber a then a else 0) [2..]
+
+simpleNumber :: Integer -> Bool
+simpleNumber x = not . elem 0 $ map (mod x) [2..k]
+ where 
+  k = truncate . sqrt $ fromIntegral x
+
+numPrimorial' :: Int -> Integer
+numPrimorial' n = product $ take n $ prime [2..]
+  where prime (p:ps) = p : prime [x | x <- ps, mod x p /= 0]
+
+------------------String ends with?
+
+solution :: String -> String -> Bool
+solution x y = isSuffixOf y x 
+
+solution' :: String -> String -> Bool
+solution' = flip isSuffixOf
+
+------------------Square Every Digit
+
+squareDigit :: Int -> Int
+squareDigit x | x < 0 =  - f
+              | otherwise = f
+ where
+  f = read $ concat $ map (\a -> show $ a^2) s
+  s = map digitToInt $ show $ abs x
+
+--------------------Functions of Integers on Cartesian Plane
+
+sumin :: Integer -> Integer
+sumin n = sum $ scanl (-) (sum [1..n]) [1..(n-1)]
+
+sumax :: Integer -> Integer
+sumax n = sum $ scanl (-) (n^2) [(n-1),(n-2)..1]
+
+sumsum :: Integer -> Integer
+sumsum n = sumin n + sumax n
 
 
 

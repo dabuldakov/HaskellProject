@@ -216,3 +216,44 @@ numLC' = fromIntegral (length (filter (\a -> length a > 15) (map chain [1..100])
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
