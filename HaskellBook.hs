@@ -2,6 +2,10 @@ import Data.Char
 import Data.List
 import qualified Data.Map as Map
 
+import qualified Geometry.Sphere as Sphere 
+import qualified Geometry.Cuboid as Cuboid 
+import qualified Geometry.Cube as Cube
+
 doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
 
@@ -256,14 +260,23 @@ findKey'' key = foldr (\(k,v) acc -> if key == k then Just v else acc) Nothing
 --------------------------------
 
 phoneBook :: Map.Map String String
-phoneBook = Map.fromList 
+phoneBook = Map.fromList $ 
  [("a","555-29-38")
  ,("s","452-29-28")
  ,("d","493-29-28")
  ,("f","205-29-28")
  ,("f","222-29-28")
- ,("g","939-82-82")
- ,("g","853-24-92")]
+ ,("gg","939-82-82")
+ ,("gg","853-24-92")]
+ 
+phoneBook' = 
+ [("a","555-29-38")
+ ,("s","452-29-28")
+ ,("d","493-29-28")
+ ,("f","205-29-28")
+ ,("f","222-29-28")
+ ,("gg","939-82-82")
+ ,("gg","853-24-92")]
 
 string2Digits :: String -> [Int]
 string2Digits = map digitToInt . filter isDigit
@@ -272,7 +285,8 @@ phoneBookToMap :: (Ord k) => [(k, String)] -> Map.Map k String
 phoneBookToMap xs = Map.fromListWith add xs
  where add number1 number2 = number1 ++ ", " ++ number2
 
-
+phoneBookToMap' :: (Ord k) => [(k, a)] -> Map.Map k [a] 
+phoneBookToMap' xs = Map.fromListWith (++) $ map (\(k,v) -> (k, [v])) xs
 
 
 
