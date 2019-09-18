@@ -1,5 +1,6 @@
 import Data.Char
 import Data.List
+import qualified Data.Map as Map
 
 doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
@@ -173,7 +174,8 @@ quickSort'' (x:xs) =
 
 
   
----------------------
+---------------------5 Функции высокого порядка
+
 zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith' _ [] _ = []
 zipWith' _ _ [] = []
@@ -207,28 +209,68 @@ numLC = fromIntegral (length (filter isLong (map chain [1..100])))
 numLC' :: Integer
 numLC' = fromIntegral (length (filter (\a -> length a > 15) (map chain [1..100])))
 
+elem'' :: (Eq a) => a -> [a] -> Bool
+elem'' y ys = foldl (\acc x -> if y == x then True else acc) False ys
 
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldr (\x acc -> f x : acc) [] xs
 
+-------------------6. Модули
 
+numWords :: String -> [(String, Int)]
+numWords = map (\x -> (head x, length x)) . group . sort . words
 
+----------------------
 
+isIn :: (Eq a) => [a] -> [a] -> Bool
+isIn x y = any (isPrefixOf x) $ tails y
+---------------------
 
+encode :: Int -> String -> String
+encode offset s = map (\a -> chr $ ord a + offset) s
 
+encode' :: Int -> String -> String
+encode' offset s = map (chr . (+offset) . ord) s
 
+decode :: Int -> String -> String
+decode shift = encode $ negate shift
+-----------------------
 
+digitSum :: Int -> Int
+digitSum = sum . map digitToInt . show
 
+firstTo40 :: Int -> Maybe Int
+firstTo40 a = find (\x -> (digitSum x) == a) [1..]
+-------------------------
 
+findKey :: (Eq k) => k -> [(k,v)] -> v 
+findKey key xs = snd . head $ filter (\(k,v) -> key == k) xs 
 
+findKey' :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey' key [] = Nothing
+findKey' key ((k,v):xs) | key == k = Just v
+                        | otherwise = findKey' key xs
 
+findKey'' :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey'' key = foldr (\(k,v) acc -> if key == k then Just v else acc) Nothing
+--------------------------------
 
+phoneBook :: Map.Map String String
+phoneBook = Map.fromList 
+ [("a","555-29-38")
+ ,("s","452-29-28")
+ ,("d","493-29-28")
+ ,("f","205-29-28")
+ ,("f","222-29-28")
+ ,("g","939-82-82")
+ ,("g","853-24-92")]
 
+string2Digits :: String -> [Int]
+string2Digits = map digitToInt . filter isDigit
 
-
-
-
-
-
-
+phoneBookToMap :: (Ord k) => [(k, String)] -> Map.Map k String
+phoneBookToMap xs = Map.fromListWith add xs
+ where add number1 number2 = number1 ++ ", " ++ number2
 
 
 
