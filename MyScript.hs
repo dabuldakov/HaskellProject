@@ -761,8 +761,8 @@ tidyNumber' x =  and $ zipWith (<=) (show x) (tail $ show x)
 numPrimorial :: Int -> Integer
 numPrimorial n = product $ take n $ filter (>0) $ map (\a -> if simpleNumber a then a else 0) [2..]
 
-simpleNumber :: Integer -> Bool
-simpleNumber x = not . elem 0 $ map (mod x) [2..k]
+simpleNumber1 :: Integer -> Bool
+simpleNumber1 x = not . elem 0 $ map (mod x) [2..k]
  where 
   k = truncate . sqrt $ fromIntegral x
 
@@ -772,8 +772,8 @@ numPrimorial' n = product $ take n $ prime [2..]
 
 ------------------String ends with?
 
-solution :: String -> String -> Bool
-solution x y = isSuffixOf y x 
+solution1 :: String -> String -> Bool
+solution1 x y = isSuffixOf y x 
 
 solution' :: String -> String -> Bool
 solution' = flip isSuffixOf
@@ -797,6 +797,40 @@ sumax n = sum $ scanl (-) (n^2) [(n-1),(n-2)..1]
 
 sumsum :: Integer -> Integer
 sumsum n = sumin n + sumax n
+
+--------------------The Poet And The Pendulum
+
+pendulum :: [Integer] -> [Integer]
+pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
+ where 
+  list = sort n
+  generate m = filter (/=0) $ zipWith (*) (tail $ list) $ cycle m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
