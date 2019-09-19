@@ -686,6 +686,15 @@ balancedNum' x = if checkOdd then "Balanced" else "Not Balanced"
  tailList = (sum $ tail $ snd check)
  check = splitAt (div size 2) (map digitToInt $ show x)
  size = length $ show x
+ 
+balancedNum' :: Int -> String
+balancedNum' = bool "Not Balanced" "Balanced" . isBalanced
+  where
+    isBalanced n = 
+        let digits = map digitToInt $ show n
+            m = (length digits - 1) `div` 2
+            s = sum . take m
+        in s digits == s (reverse digits)
 
 -----------------STRONGN Strong Number (Special Numbers Series #2) 
 
@@ -798,13 +807,6 @@ sumax n = sum $ scanl (-) (n^2) [(n-1),(n-2)..1]
 sumsum :: Integer -> Integer
 sumsum n = sumin n + sumax n
 
---------------------The Poet And The Pendulum
-
-pendulum :: [Integer] -> [Integer]
-pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
- where 
-  list = sort n
-  generate m = filter (/=0) $ zipWith (*) (tail $ list) $ cycle m
 
 
 

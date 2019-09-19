@@ -290,9 +290,36 @@ baseRect :: Float -> Float -> Shape
 baseRect width heith = Rectangle (Point 0 0) (Point width heith)
 
 -----------------
+--------------------The Poet And The Pendulum
+
+pendulum :: [Integer] -> [Integer]
+pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
+ where 
+  list = sort n
+  generate m = filter (/=0) $ zipWith (*) (tail $ list) $ cycle m
 
 
+pendulum' :: [Integer] -> [Integer] 
+pendulum' = check 0 [] . sort
+  where 
+   check k acc [] = acc
+   check k acc (x:xs) | k == 0    = check (k+1) (x:acc) xs
+                      | odd k     = check (k+1) (acc ++ [x]) xs
+                      | otherwise = check (k+1) (x:acc) xs
+  
+pendulum'' :: [Integer] -> [Integer]
+pendulum'' = check 0 [] [] . sort
+  where 
+   check k accL accR [] = accL ++ (reverse accR)
+   check k accL accR (x:xs) | k == 0    = check (k+1) (x:accL)    accR  xs
+                            | odd k     = check (k+1)    accL  (x:accR) xs
+                            | otherwise = check (k+1) (x:accL)    accR  xs
 
+pendulum''' :: [Int] -> [Int]
+pendulum''' xs = map (sorted !!) indices where
+  l = length xs - 1
+  indices = reverse [0,2..l] ++ [1,3..l]
+  sorted = sort xs
 
 
 
