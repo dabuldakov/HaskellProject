@@ -322,11 +322,44 @@ pendulum''' xs = map (sorted !!) indices where
   sorted = sort xs
 
 
+-------------------------Is this a triangle?
 
+isTriangle :: Int -> Int -> Int -> Bool
+isTriangle a b c | a < (b + c) && a > (b - c) &&
+                   b < (a + c) && b > (a - c) && 
+                   c < (a + b) && c > (a - b) = True
+                 | otherwise = False
 
+-------------------------Highest and Lowest
 
+highAndLow :: String -> String
+highAndLow input = show (maximum check) ++ " " ++ show (minimum check) 
+ where 
+  check =  map (read) (words input) :: [Int]
 
+--------------------Isograms
 
+isIsogram :: String -> Bool
+isIsogram = check . map toLower
+ where 
+  check [] = True
+  check (x:xs) | x `elem` xs = False
+  check (x:xs) | otherwise = check xs
+
+isIsogram' :: String -> Bool
+isIsogram' n = n == (nub $ map toLower n)
+
+-------------------Split Strings
+
+solution :: String -> [String]
+solution xs = check $ xs ++ "_" 
+ where
+  check xss = let l = length xss - 1
+              in zipWith (\a b -> xss !! a : xss !! b : []) [0,2..l] [1,3..l]
+
+solution' [] = []
+solution' (x:[]) = [[x,'_']]
+solution' (x:y:xs) = [x,y]:(solution xs)
 
 
 
