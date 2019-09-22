@@ -807,7 +807,121 @@ sumax n = sum $ scanl (-) (n^2) [(n-1),(n-2)..1]
 sumsum :: Integer -> Integer
 sumsum n = sumin n + sumax n
 
+--------------------The Poet And The Pendulum
 
+pendulum :: [Integer] -> [Integer]
+pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
+ where 
+  list = sort n
+  generate m = filter (/=0) $ zipWith (*) (tail $ list) $ cycle m
+
+
+pendulum' :: [Integer] -> [Integer] 
+pendulum' = check 0 [] . sort
+  where 
+   check k acc [] = acc
+   check k acc (x:xs) | k == 0    = check (k+1) (x:acc) xs
+                      | odd k     = check (k+1) (acc ++ [x]) xs
+                      | otherwise = check (k+1) (x:acc) xs
+  
+pendulum'' :: [Integer] -> [Integer]
+pendulum'' = check 0 [] [] . sort
+  where 
+   check k accL accR [] = accL ++ (reverse accR)
+   check k accL accR (x:xs) | k == 0    = check (k+1) (x:accL)    accR  xs
+                            | odd k     = check (k+1)    accL  (x:accR) xs
+                            | otherwise = check (k+1) (x:accL)    accR  xs
+
+pendulum''' :: [Int] -> [Int]
+pendulum''' xs = map (sorted !!) indices where
+  l = length xs - 1
+  indices = reverse [0,2..l] ++ [1,3..l]
+  sorted = sort xs
+
+
+-------------------------Is this a triangle?
+
+isTriangle :: Int -> Int -> Int -> Bool
+isTriangle a b c | a < (b + c) && a > (b - c) &&
+                   b < (a + c) && b > (a - c) && 
+                   c < (a + b) && c > (a - b) = True
+                 | otherwise = False
+
+-------------------------Highest and Lowest
+
+highAndLow :: String -> String
+highAndLow input = show (maximum check) ++ " " ++ show (minimum check) 
+ where 
+  check =  map (read) (words input) :: [Int]
+
+--------------------Isograms
+
+isIsogram :: String -> Bool
+isIsogram = check . map toLower
+ where 
+  check [] = True
+  check (x:xs) | x `elem` xs = False
+  check (x:xs) | otherwise = check xs
+
+isIsogram' :: String -> Bool
+isIsogram' n = n == (nub $ map toLower n)
+
+-------------------Split Strings
+
+solution :: String -> [String]
+solution xs = check $ xs ++ "_" 
+ where
+  check xss = let l = length xss - 1
+              in zipWith (\a b -> xss !! a : xss !! b : []) [0,2..l] [1,3..l]
+
+solution' [] = []
+solution' (x:[]) = [[x,'_']]
+solution' (x:y:xs) = [x,y]:(solution xs)
+
+-------------------Tribonacci Sequence
+
+tribonacci :: Num a => (a, a, a) -> Int -> [a]
+tribonacci (a,b,c) 0 = []
+tribonacci (a,b,c) 1 = [a]
+tribonacci (a,b,c) 2 = [a,b]
+tribonacci (a,b,c) n = check [c,b,a] 4
+ where 
+  check            line i | i > n = reverse line
+  check line@(x:y:z:xs) i | otherwise = check ((x+y+z):line) (i+1)
+
+tribonacci' :: Num a => (a, a, a) -> Int -> [a]
+tribonacci' _ n | n < 1 = []
+tribonacci' (a, b, c) n = a : tribonacci (b, c, a+b+c) (n-1)
+
+------------------Title Case
+
+titleCase :: String -> String -> String
+titleCase _ [] = []
+titleCase minor title = (toUpper $ head check) : tail check
+ where 
+  check = unwords (map (\a -> if elem a lm then (toLower $ head a) : tail a else a) lt)
+  lm = lower minor
+  lt = lower title
+  lower x =  map (\a -> (toUpper (head a) : (map toLower $ tail a))) (words x)
+
+--------------------Dubstep
+
+songDecoder :: String -> String
+songDecoder = unwords . words . check
+ where
+  check [] = []
+  check (x:[]) = x:[]
+  check (x:y:[]) = x:y:[]
+  check (x:y:z:xs) = if x == 'W' && y == 'U' && z == 'B' then (' ' : (check xs)) else (x : check (y:z:xs))
+
+songDecoder' :: String -> String
+songDecoder' = unwords . words . go
+  where go []               = []
+        go ('W':'U':'B':xs) = ' ' : go xs
+        go (x:xs)           =   x : go xs
+
+songDecoder'' :: String -> String
+songDecoder'' = unwords . filter (not . null) . splitOn "WUB"
 
 
 

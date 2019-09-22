@@ -290,82 +290,88 @@ baseRect :: Float -> Float -> Shape
 baseRect width heith = Rectangle (Point 0 0) (Point width heith)
 
 -----------------
---------------------The Poet And The Pendulum
+--------------------Valid Braces
 
-pendulum :: [Integer] -> [Integer]
-pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
- where 
-  list = sort n
-  generate m = filter (/=0) $ zipWith (*) (tail $ list) $ cycle m
-
-
-pendulum' :: [Integer] -> [Integer] 
-pendulum' = check 0 [] . sort
-  where 
-   check k acc [] = acc
-   check k acc (x:xs) | k == 0    = check (k+1) (x:acc) xs
-                      | odd k     = check (k+1) (acc ++ [x]) xs
-                      | otherwise = check (k+1) (x:acc) xs
-  
-pendulum'' :: [Integer] -> [Integer]
-pendulum'' = check 0 [] [] . sort
-  where 
-   check k accL accR [] = accL ++ (reverse accR)
-   check k accL accR (x:xs) | k == 0    = check (k+1) (x:accL)    accR  xs
-                            | odd k     = check (k+1)    accL  (x:accR) xs
-                            | otherwise = check (k+1) (x:accL)    accR  xs
-
-pendulum''' :: [Int] -> [Int]
-pendulum''' xs = map (sorted !!) indices where
-  l = length xs - 1
-  indices = reverse [0,2..l] ++ [1,3..l]
-  sorted = sort xs
-
-
--------------------------Is this a triangle?
-
-isTriangle :: Int -> Int -> Int -> Bool
-isTriangle a b c | a < (b + c) && a > (b - c) &&
-                   b < (a + c) && b > (a - c) && 
-                   c < (a + b) && c > (a - b) = True
-                 | otherwise = False
-
--------------------------Highest and Lowest
-
-highAndLow :: String -> String
-highAndLow input = show (maximum check) ++ " " ++ show (minimum check) 
- where 
-  check =  map (read) (words input) :: [Int]
-
---------------------Isograms
-
-isIsogram :: String -> Bool
-isIsogram = check . map toLower
- where 
-  check [] = True
-  check (x:xs) | x `elem` xs = False
-  check (x:xs) | otherwise = check xs
-
-isIsogram' :: String -> Bool
-isIsogram' n = n == (nub $ map toLower n)
-
--------------------Split Strings
-
-solution :: String -> [String]
-solution xs = check $ xs ++ "_" 
+validBraces :: String -> Bool
+validBraces s = if length (delScobe (div (length s) 2) s) > 0 then False else True
  where
-  check xss = let l = length xss - 1
-              in zipWith (\a b -> xss !! a : xss !! b : []) [0,2..l] [1,3..l]
+  delScobe 0 acc = acc
+  delScobe n acc = delScobe (n-1) (check acc)
+  check [] = []
+  check (x:[]) = x:[]
+  check (x:y:xs) | x == '[' && y == ']' || x == '(' && y == ')' || x == '{' && y == '}' = check xs
+                 | otherwise = x : (check $ y:xs) 
 
-solution' [] = []
-solution' (x:[]) = [[x,'_']]
-solution' (x:y:xs) = [x,y]:(solution xs)
+validBraces' :: String -> Bool
+validBraces' s = null (delScobe (div (length s) 2) s)
+ where
+  pairs = ["[]", "()", "{}"]
+  delScobe 0 acc = acc
+  delScobe n acc = delScobe (n-1) (check acc)
+  check [] = []
+  check (x:[]) = x:[]
+  check (x:y:xs) | elem (x:y:[]) pairs  = check xs
+                 | otherwise = x : (check $ y:xs) 
 
+validBraces'' :: String -> Bool
+validBraces'' ""     = True
+validBraces'' (x:xs) = go [x] xs
+  where go ('(':xs) (')':ys) = go xs ys
+        go ('[':xs) (']':ys) = go xs ys
+        go ('{':xs) ('}':ys) = go xs ys
+        go xs       (y:ys)   = go (y:xs) ys
+        go []       []       = True
+        go _        []       = False
 
+--------------------Product of consecutive Fib numbers
 
+productFib :: Integer -> (Integer, Integer, Bool)
+productFib n = check (fibonacci 1) (fibonacci 2) 2
+ where 
+  check i1 i2 r | (i1 * i2) == n = (i1,i2,True)
+                | (i1 * i2)  < n = check i2 (fibonacci (r+1)) (r+1)
+                | otherwise = (i1,i2,False)
+  fibonacci 0 = 0
+  fibonacci 1 = 1
+  fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
 
+productFib' :: Integer -> (Integer, Integer, Bool)
+productFib' n = check 1 1
+ where 
+  check i1 i2 | i1 * i2 == n = (i1,i2,True)
+              | i1 * i2  < n = check i2 (i1+i2)
+              | otherwise    = (i1,i2,False)
 
+------------------Reverse words
 
+reverseWords :: String -> String
+reverseWords n = check n [] []
+ where 
+  check     [] word line = line ++ word
+  check (x:xs) word line| x /= ' ' = check xs (x : word) line
+                        | otherwise = check xs [] (line ++ word ++ [x])
+
+-----------------Snail
+
+snail :: [[Int]] -> [Int]
+snail = foldl1 (++) . check 
+ where 
+  check [] = []
+  check (x:xs) = (x : (map (\a -> [last a]) xs)) ++ (check $ reverse $ map (reverse . init) xs)
+
+snail' :: [[Int]] -> [Int]
+snail' [] = []
+snail' (xs:xss) = xs ++ (snail . reverse . transpose) xss
+
+------------------------Speed Control
+
+gps :: Int -> [Double] -> Int
+gps s [] = 0
+gps s [x] = 0
+gps s x = abs $ round $ minimum $ map ((3600 / (fromIntegral s)) *) $ zipWith (-) x (tail x)
+
+sss :: Int -> Double -> Double
+sss s x = (fromIntegral s) / x
 
 
 
