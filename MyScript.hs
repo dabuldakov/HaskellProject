@@ -809,7 +809,7 @@ sumsum n = sumin n + sumax n
 
 --------------------The Poet And The Pendulum
 
-pendulum :: [Integer] -> [Integer]
+pendulum :: [Int] -> [Int]
 pendulum n = (reverse $ generate [0,1]) ++ [head $ list] ++ generate [1,0]
  where 
   list = sort n
@@ -923,7 +923,88 @@ songDecoder' = unwords . words . go
 songDecoder'' :: String -> String
 songDecoder'' = unwords . filter (not . null) . splitOn "WUB"
 
+--------------------Valid Braces
 
+validBraces :: String -> Bool
+validBraces s = if length (delScobe (div (length s) 2) s) > 0 then False else True
+ where
+  delScobe 0 acc = acc
+  delScobe n acc = delScobe (n-1) (check acc)
+  check [] = []
+  check (x:[]) = x:[]
+  check (x:y:xs) | x == '[' && y == ']' || x == '(' && y == ')' || x == '{' && y == '}' = check xs
+                 | otherwise = x : (check $ y:xs) 
+
+validBraces' :: String -> Bool
+validBraces' s = null (delScobe (div (length s) 2) s)
+ where
+  pairs = ["[]", "()", "{}"]
+  delScobe 0 acc = acc
+  delScobe n acc = delScobe (n-1) (check acc)
+  check [] = []
+  check (x:[]) = x:[]
+  check (x:y:xs) | elem (x:y:[]) pairs  = check xs
+                 | otherwise = x : (check $ y:xs) 
+
+validBraces'' :: String -> Bool
+validBraces'' ""     = True
+validBraces'' (x:xs) = go [x] xs
+  where go ('(':xs) (')':ys) = go xs ys
+        go ('[':xs) (']':ys) = go xs ys
+        go ('{':xs) ('}':ys) = go xs ys
+        go xs       (y:ys)   = go (y:xs) ys
+        go []       []       = True
+        go _        []       = False
+
+--------------------Product of consecutive Fib numbers
+
+productFib :: Integer -> (Integer, Integer, Bool)
+productFib n = check (fibonacci 1) (fibonacci 2) 2
+ where 
+  check i1 i2 r | (i1 * i2) == n = (i1,i2,True)
+                | (i1 * i2)  < n = check i2 (fibonacci (r+1)) (r+1)
+                | otherwise = (i1,i2,False)
+  fibonacci 0 = 0
+  fibonacci 1 = 1
+  fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+
+productFib' :: Integer -> (Integer, Integer, Bool)
+productFib' n = check 1 1
+ where 
+  check i1 i2 | i1 * i2 == n = (i1,i2,True)
+              | i1 * i2  < n = check i2 (i1+i2)
+              | otherwise    = (i1,i2,False)
+
+------------------Reverse words
+
+reverseWords :: String -> String
+reverseWords n = check n [] []
+ where 
+  check     [] word line = line ++ word
+  check (x:xs) word line| x /= ' ' = check xs (x : word) line
+                        | otherwise = check xs [] (line ++ word ++ [x])
+
+-----------------Snail
+
+snail :: [[Int]] -> [Int]
+snail = foldl1 (++) . check 
+ where 
+  check [] = []
+  check (x:xs) = (x : (map (\a -> [last a]) xs)) ++ (check $ reverse $ map (reverse . init) xs)
+
+snail' :: [[Int]] -> [Int]
+snail' [] = []
+snail' (xs:xss) = xs ++ (snail . reverse . transpose) xss
+
+------------------------Speed Control
+
+gps :: Int -> [Double] -> Int
+gps s [] = 0
+gps s [x] = 0
+gps s x = abs $ round $ minimum $ map ((3600 / (fromIntegral s)) *) $ zipWith (-) x (tail x)
+
+sss :: Int -> Double -> Double
+sss s x = (fromIntegral s) / x
 
 
 

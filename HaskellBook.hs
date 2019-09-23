@@ -248,6 +248,7 @@ phoneBook = Map.fromList $
  ,("gg","939-82-82")
  ,("gg","853-24-92")]
  
+
 phoneBook' = 
  [("a","555-29-38")
  ,("s","452-29-28")
@@ -290,88 +291,93 @@ baseRect :: Float -> Float -> Shape
 baseRect width heith = Rectangle (Point 0 0) (Point width heith)
 
 -----------------
---------------------Valid Braces
 
-validBraces :: String -> Bool
-validBraces s = if length (delScobe (div (length s) 2) s) > 0 then False else True
- where
-  delScobe 0 acc = acc
-  delScobe n acc = delScobe (n-1) (check acc)
-  check [] = []
-  check (x:[]) = x:[]
-  check (x:y:xs) | x == '[' && y == ']' || x == '(' && y == ')' || x == '{' && y == '}' = check xs
-                 | otherwise = x : (check $ y:xs) 
+data Person = Person { firstName :: String 
+                     , lastName :: String 
+                     , age :: Int 
+                     , heigt :: Float 
+                     , phoneNumber :: String
+                     , flavor :: String } deriving (Show)
 
-validBraces' :: String -> Bool
-validBraces' s = null (delScobe (div (length s) 2) s)
- where
-  pairs = ["[]", "()", "{}"]
-  delScobe 0 acc = acc
-  delScobe n acc = delScobe (n-1) (check acc)
-  check [] = []
-  check (x:[]) = x:[]
-  check (x:y:xs) | elem (x:y:[]) pairs  = check xs
-                 | otherwise = x : (check $ y:xs) 
+guy = Person "Fred" "Kruger" 44 190.5 "22-45-45" "Escimo"
 
-validBraces'' :: String -> Bool
-validBraces'' ""     = True
-validBraces'' (x:xs) = go [x] xs
-  where go ('(':xs) (')':ys) = go xs ys
-        go ('[':xs) (']':ys) = go xs ys
-        go ('{':xs) ('}':ys) = go xs ys
-        go xs       (y:ys)   = go (y:xs) ys
-        go []       []       = True
-        go _        []       = False
+fl :: Person -> String
+fl (Person f l _ _ _ _) = f ++ l
 
---------------------Product of consecutive Fib numbers
+-------------------------
 
-productFib :: Integer -> (Integer, Integer, Bool)
-productFib n = check (fibonacci 1) (fibonacci 2) 2
- where 
-  check i1 i2 r | (i1 * i2) == n = (i1,i2,True)
-                | (i1 * i2)  < n = check i2 (fibonacci (r+1)) (r+1)
-                | otherwise = (i1,i2,False)
-  fibonacci 0 = 0
-  fibonacci 1 = 1
-  fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+data Car = Car {company :: String
+              , model :: String
+              , year :: Int } deriving (Show)
 
-productFib' :: Integer -> (Integer, Integer, Bool)
-productFib' n = check 1 1
- where 
-  check i1 i2 | i1 * i2 == n = (i1,i2,True)
-              | i1 * i2  < n = check i2 (i1+i2)
-              | otherwise    = (i1,i2,False)
+tellCar :: Car -> String
+tellCar (Car c n y) = c ++ " " ++ n ++ " " ++ show y
 
-------------------Reverse words
+mustang = Car "Ford" "Mustang" 1978
 
-reverseWords :: String -> String
-reverseWords n = check n [] []
- where 
-  check     [] word line = line ++ word
-  check (x:xs) word line| x /= ' ' = check xs (x : word) line
-                        | otherwise = check xs [] (line ++ word ++ [x])
+-----------------------------
 
------------------Snail
+data Vector a = Vector a a a deriving (Show)
 
-snail :: [[Int]] -> [Int]
-snail = foldl1 (++) . check 
- where 
-  check [] = []
-  check (x:xs) = (x : (map (\a -> [last a]) xs)) ++ (check $ reverse $ map (reverse . init) xs)
+vplus :: (Num a) => Vector a -> Vector a -> Vector a
+vplus (Vector i j k) (Vector l m n) = Vector (i+l) (j+m) (k+n)
 
-snail' :: [[Int]] -> [Int]
-snail' [] = []
-snail' (xs:xss) = xs ++ (snail . reverse . transpose) xss
+scalarProd :: (Num a) => Vector a -> Vector a -> a
+scalarProd (Vector i j k) (Vector l m n) = i*l + j*m + k*n
 
-------------------------Speed Control
+vmult :: (Num a) => Vector a -> a -> Vector a
+vmult (Vector i j k) m = Vector (i*m) (j*m) (k*m)
 
-gps :: Int -> [Double] -> Int
-gps s [] = 0
-gps s [x] = 0
-gps s x = abs $ round $ minimum $ map ((3600 / (fromIntegral s)) *) $ zipWith (-) x (tail x)
+-----------------------------
 
-sss :: Int -> Double -> Double
-sss s x = (fromIntegral s) / x
+data Person2 = Person2 {firstName2 :: String
+                      , lastName2 :: String
+                      , age2 :: Int } deriving (Eq, Show, Read)
+
+bob = Person2 "Bob" "Dilan" 55
+john = Person2 "John" "Brein" 25
+mark = Person2 "Mark" "Tven" 70
+
+mysteryDude = "Person2 { firstName2 =\"Mikle\"" ++
+                     ", lastName2 =\"Dimond\"" ++
+                     ", age2 = 45}"
+
+------------------------------------
+
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
+ deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
+-------------------------------------
+
+phoneBook'' :: PhoneBook
+phoneBook'' = 
+ [("a","555-29-38")
+ ,("s","452-29-28")
+ ,("d","493-29-28")
+ ,("f","205-29-28")
+ ,("f","222-29-28")
+ ,("gg","939-82-82")
+ ,("gg","853-24-92")]
+
+
+type PhoneNumber = String
+type Name = String
+type PhoneBook = [(Name, PhoneNumber)]
+
+inPhoneBook :: Name -> PhoneNumber -> PhoneBook -> Bool
+inPhoneBook namep numberp bookp = (namep, numberp) `elem` bookp
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
