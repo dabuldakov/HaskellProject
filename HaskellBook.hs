@@ -1,10 +1,13 @@
 import Data.Char
 import Data.List
 import qualified Data.Map as Map
+import Text.Read (readMaybe)
 
 import qualified Geometry.Sphere as Sphere 
 import qualified Geometry.Cuboid as Cuboid 
 import qualified Geometry.Cube as Cube
+
+
 
 doubleMe' x = x + x 
 length' xs = sum [1 | _ <- xs]
@@ -367,15 +370,29 @@ type PhoneBook = [(Name, PhoneNumber)]
 inPhoneBook :: Name -> PhoneNumber -> PhoneBook -> Bool
 inPhoneBook namep numberp bookp = (namep, numberp) `elem` bookp
 
+----------------Parse float
 
+parseFloat :: String -> Maybe Float
+parseFloat [] = Nothing
+parseFloat s | check = Nothing
+             | otherwise = Just (read s :: Float)
+ where 
+  check = any (==False) (map (\a -> (isDigit a) || (a == '.')) s)
 
+parseFloat' :: String -> Maybe Float
+parseFloat' = readMaybe
 
+---------------Odder Than the Rest
 
+oddOne :: [Int] -> Int
+oddOne = check 0 
+ where 
+  check n []  = -1
+  check n (x:xs) | odd x = n
+                 | otherwise = check (n+1) xs  
 
-
-
-
-
+--oddOne :: [Int] -> Int
+--oddOne = fromMaybe (-1) . findIndex odd
 
 
 
