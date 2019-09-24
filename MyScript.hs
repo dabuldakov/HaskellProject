@@ -3,6 +3,7 @@ import Data.Either
 import Data.List.Split
 import Data.List
 import Data.Bool
+import Text.Read (readMaybe)
 -- :set +s
 
 
@@ -687,8 +688,8 @@ balancedNum' x = if checkOdd then "Balanced" else "Not Balanced"
  check = splitAt (div size 2) (map digitToInt $ show x)
  size = length $ show x
  
-balancedNum' :: Int -> String
-balancedNum' = bool "Not Balanced" "Balanced" . isBalanced
+balancedNum'' :: Int -> String
+balancedNum'' = bool "Not Balanced" "Balanced" . isBalanced
   where
     isBalanced n = 
         let digits = map digitToInt $ show n
@@ -868,15 +869,15 @@ isIsogram' n = n == (nub $ map toLower n)
 
 -------------------Split Strings
 
-solution :: String -> [String]
-solution xs = check $ xs ++ "_" 
+solution2 :: String -> [String]
+solution2 xs = check $ xs ++ "_" 
  where
   check xss = let l = length xss - 1
               in zipWith (\a b -> xss !! a : xss !! b : []) [0,2..l] [1,3..l]
 
-solution' [] = []
-solution' (x:[]) = [[x,'_']]
-solution' (x:y:xs) = [x,y]:(solution xs)
+solution2' [] = []
+solution2' (x:[]) = [[x,'_']]
+solution2' (x:y:xs) = [x,y]:(solution2' xs)
 
 -------------------Tribonacci Sequence
 
@@ -977,8 +978,8 @@ productFib' n = check 1 1
 
 ------------------Reverse words
 
-reverseWords :: String -> String
-reverseWords n = check n [] []
+reverseWords2 :: String -> String
+reverseWords2 n = check n [] []
  where 
   check     [] word line = line ++ word
   check (x:xs) word line| x /= ' ' = check xs (x : word) line
@@ -1006,12 +1007,36 @@ gps s x = abs $ round $ minimum $ map ((3600 / (fromIntegral s)) *) $ zipWith (-
 sss :: Int -> Double -> Double
 sss s x = (fromIntegral s) / x
 
+----------------Parse float
 
+parseFloat :: String -> Maybe Float
+parseFloat [] = Nothing
+parseFloat s | check = Nothing
+             | otherwise = Just (read s :: Float)
+ where 
+  check = any (==False) (map (\a -> (isDigit a) || (a == '.')) s)
 
+parseFloat' :: String -> Maybe Float
+parseFloat' = readMaybe
 
+---------------Odder Than the Rest
 
+oddOne :: [Int] -> Int
+oddOne = check 0 
+ where 
+  check n []  = -1
+  check n (x:xs) | odd x = n
+                 | otherwise = check (n+1) xs  
 
+--oddOne :: [Int] -> Int
+--oddOne = fromMaybe (-1) . findIndex odd
 
+-------------------Sort Out The Men From Boys
+
+menFromBoys :: [Int] -> [Int]
+menFromBoys xs = check even ++ (reverse $ check odd)
+ where 
+  check f = sort $ filter f $ nub xs
 
 
 
