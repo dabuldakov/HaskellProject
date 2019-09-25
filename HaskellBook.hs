@@ -492,8 +492,15 @@ instance Tofu Frank where
 
 ---------------------- 8. ВВОД-ВЫВОД
 
+-------------------Separate The Wheat From The Chaff
 
-
+wheatFromChaff :: [Int] -> [(Int, Int)]
+wheatFromChaff n = check
+ where 
+  x = zip [0..] n
+  y = filter (\a -> snd a > 0) x
+  z = reverse $ filter (\a -> snd a < 0) x
+  check = (zipWith (\a b -> if (fst a) < (fst b) then (fst a, snd b) else a) y z) ++ (zipWith (\a b -> if (fst a) < (fst b) then (fst b, snd a) else b) y z)
 
 
 
