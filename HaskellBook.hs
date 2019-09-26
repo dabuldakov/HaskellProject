@@ -494,13 +494,28 @@ instance Tofu Frank where
 
 -------------------Separate The Wheat From The Chaff
 
-wheatFromChaff :: [Int] -> [(Int, Int)]
-wheatFromChaff n = check
+wheatFromChaff :: [Int] -> [Int]
+wheatFromChaff n = snd $ unzip $ sort (check ++ myZip x)
  where 
   x = zip [0..] n
   y = filter (\a -> snd a > 0) x
   z = reverse $ filter (\a -> snd a < 0) x
   check = (zipWith (\a b -> if (fst a) < (fst b) then (fst a, snd b) else a) y z) ++ (zipWith (\a b -> if (fst a) < (fst b) then (fst b, snd a) else b) y z)
+  check' = fst $ unzip check
+  myZip [] = []
+  myZip (x:xs) | (fst x) `elem` check' = myZip xs
+               | otherwise = x : myZip xs   
+
+
+wheatFromChaff' :: [Int] -> [Int]
+wheatFromChaff' n = check n list []
+ where
+  list = reverse $ filter (<0) n
+  check [] [] _ = []
+  check (x:xs) [] z | x > 0 = x : (check xs [] z)
+                    | otherwise = (head z) : (check xs [] (tail z)) 
+  check (x:xs) y  z | x > 0 = (head y) : (check xs (tail y) (x:z))
+                    | otherwise = x : (check xs (init y) z)                                                                       
 
 
 
