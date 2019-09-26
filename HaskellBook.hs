@@ -517,10 +517,20 @@ wheatFromChaff' n = check n list []
   check (x:xs) y  z | x > 0 = (head y) : (check xs (tail y) (x:z))
                     | otherwise = x : (check xs (init y) z)                                                                       
 
+wheatFromChaff'' :: [Int] -> [Int]
+wheatFromChaff'' n = check n list [] ll
+ where
+  ll = length list
+  list = reverse $ filter (<0) n
+  
+  check2 []     _  = []
+  check2 xs     [] = xs
+  check2 (x:xs) (z:zs)   | x > 0     = x : (check2 xs (z:zs))
+                         | otherwise = z : (check2 xs    zs) 
 
-
-
-
+  check x       y      z 0 = check2 x z
+  check (x:xs) (y:ys)  z k | x > 0     = y : (check xs    ys (x:z) (k-1))
+                           | otherwise = x : (check xs (y:ys)   z  (k-1)) 
 
 
 

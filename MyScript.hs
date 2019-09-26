@@ -1038,13 +1038,7 @@ menFromBoys xs = check even ++ (reverse $ check odd)
  where 
   check f = sort $ filter f $ nub xs
 
--------------------Separate The Wheat From The Chaff
 
-wheatFromChaff :: [Int] -> [Int]
-wheatFromChaff n = zipWith (min) check n
- where 
-  check = zipWith (\a b -> if a > 0 then b else a) onlyMinus ((reverse (filter (<0) n)) ++ [0,0,0,0,0,0,0])
-  onlyMinus = map (\a -> if (a < 0) then 0 else a) n
 
  
 
