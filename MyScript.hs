@@ -1039,6 +1039,62 @@ menFromBoys xs = check even ++ (reverse $ check odd)
   check f = sort $ filter f $ nub xs
 
 
+-------------------Separate The Wheat From The Chaff
+
+wheatFromChaff :: [Int] -> [Int]
+wheatFromChaff n = snd $ unzip $ sort (check ++ myZip x)
+ where 
+  x = zip [0..] n
+  y = filter (\a -> snd a > 0) x
+  z = reverse $ filter (\a -> snd a < 0) x
+  check = (zipWith (\a b -> if (fst a) < (fst b) then (fst a, snd b) else a) y z) ++ (zipWith (\a b -> if (fst a) < (fst b) then (fst b, snd a) else b) y z)
+  check' = fst $ unzip check
+  myZip [] = []
+  myZip (x:xs) | (fst x) `elem` check' = myZip xs
+               | otherwise = x : myZip xs   
+-----------------------------------------------
+
+wheatFromChaff' :: [Int] -> [Int]
+wheatFromChaff' n = check n list []
+ where
+  list = reverse $ filter (<0) n
+  check []     [] _ = []
+  check (x:xs) [] z     |     x > 0 =       x  : (check xs []       z )
+                        | otherwise = (head z) : (check xs [] (tail z)) 
+
+  check (x:xs) (y:ys) z |     x > 0 = y : (check xs          ys  (x:z))
+                        | otherwise = x : (check xs (init (y:ys))   z )                                                                       
+-----------------------------------------------
+
+wheatFromChaff''' :: [Int] -> [Int]   
+wheatFromChaff''' n = check n list []
+ where
+  list = reverse $ filter (<0) n
+
+  check2    []    _    = []
+  check2    xs     []  = xs
+  check2 (x:xs) (z:zs) |     x > 0 = x : (check2 xs (z:zs))
+                       | otherwise = z : (check2 xs    zs ) 
+
+  check x      []     z     = check2 x z
+  check (x:xs) (y:ys) z     |     x > 0 = y : (check xs          ys (x:z))
+                            | otherwise = x : (check xs (init (y:ys)) z )  
+------------------------------------------
+
+wheatFromChaff'' :: [Int] -> [Int]              -----прошел тест таймаута
+wheatFromChaff'' n = check n list [] ll
+ where
+  ll = length list
+  list = reverse $ filter (<0) n
+  
+  check2 []     _          = []
+  check2 xs     []         = xs
+  check2 (x:xs) (z:zs)     | x > 0     = x : (check2 xs (z:zs))
+                           | otherwise = z : (check2 xs    zs ) 
+
+  check x         y    z 0 = check2 x z
+  check (x:xs) (y:ys)  z k | x > 0     = y : (check xs    ys (x:z) (k-1))
+                           | otherwise = x : (check xs (y:ys)   z  (k-1)) 
 
  
 
