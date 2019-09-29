@@ -494,8 +494,25 @@ instance Tofu Frank where
 -----------------------9. Файлы и потоки
 
 
+--------------------Merged String Checker
+isMerge :: String -> String -> String -> String
+isMerge s part1 part2 = check part1 part2 
+ where
+  check :: String -> String -> String
+  check [] []         = []
+  check x  []         = [] ++ x
+  check []  y         = [] ++ y
+  check (x:xs) (y:ys) = x: y : (check xs ys) 
 
+---------------------Equal Sides Of An Array
 
+findEvenIndex :: [Int] -> Int
+findEvenIndex arr =  check arr 0 0
+ where
+  check []     left i | left == 0 = i 
+                      | otherwise = (-1)
+  check (x:xs) left i | left == sum xs = i
+                      | otherwise = check xs (left + x) (i+1)
 
 
 

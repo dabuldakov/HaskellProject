@@ -1,6 +1,11 @@
 import Data.Char
 import Control.Monad
+import Control.Exception
 import System.IO
+import System.Directory
+import System.Environment 
+import Data.List
+
 
 {-main = do
   putStrLn "Enter words: "
@@ -53,10 +58,60 @@ isPal x = x == reverse x-}
  putStr contents
  hClose handle-}
 
-main = do
+{-main = do
  withFile "file.txt" ReadMode (\h -> do 
   contents <- hGetContents h
-  putStr contents)
+  putStr contents)-}
+  
+{-main = do 
+ contents <- readFile "file.txt" 
+ putStr contents-}
+ 
+{-main = do
+ contents <- readFile "file.txt"
+ appendFile "file1.txt" (map toUpper contents)-}
+ 
+{-main = do
+ todoItem <- getLine 
+ appendFile "todo.txt" (todoItem ++ "\n")-}
+ 
+{-main = do
+ contents <- readFile "todo.txt"
+ let todoTasks = lines contents
+     numberedTasks = zipWith (\a b -> show a ++ ") " ++ b) [0..] todoTasks
+ putStrLn "Your tasks:"
+ mapM_ putStrLn numberedTasks
+ putStrLn "Choose number for delete!"
+ numberString <- getLine
+ let number = read numberString
+     newTodoItems = unlines $ delete (todoTasks !! number) todoTasks
+ bracketOnError (openTempFile "." "temp")
+   (\(tempName, tempHandle) -> do
+        hClose tempHandle
+        removeFile tempName)
+   (\(tempName, tempHandle) -> do
+        hPutStr tempHandle newTodoItems
+        hClose tempHandle
+        removeFile "todo.txt"
+        renameFile tempName "todo.txt"
+        putStrLn ("Deleted: " ++ (todoTasks !! number))) -}
+
+dispatch :: String -> [String] -> IO () 
+dispatch "add" = add 
+
+
+main = do  
+  (command:argList) <- getArgs   
+  dispatch command argList
+
+
+add :: [String] -> IO () 
+add [fileName, todoItem] = appendFile fileName (todoItem ++ "\n")
+
+ 
+ 
+ 
+ 
 
 
 
