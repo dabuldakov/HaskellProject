@@ -97,7 +97,14 @@ isPal x = x == reverse x-}
         putStrLn ("Deleted: " ++ (todoTasks !! number))) -}
 
 dispatch :: String -> [String] -> IO () 
-dispatch "add" = add 
+dispatch "add"    = add 
+dispatch "view"   = view
+dispatch "remove" = remove
+dispatch "bump"   = bump
+dispatch command  = doesntExist command
+
+doesntExist :: String -> [String] -> IO ()
+doesntExist command _ = putStrLn $ "Command " ++ command ++ " not found"
 
 
 main = do  
@@ -107,11 +114,52 @@ main = do
 
 add :: [String] -> IO () 
 add [fileName, todoItem] = appendFile fileName (todoItem ++ "\n")
+add _ = putStrLn "Command ADD has only two argements"
 
+view :: [String] -> IO ()
+view [fileName] = do
+ contents <- readFile fileName
+ let todoTasks = lines contents
+     numberedTasks = zipWith (\n line -> show n ++ ") " ++ line) 
+                             [0..] 
+                             todoTasks 
+ putStr $ unlines numberedTasks
+view _ = putStrLn "Command ADD has one argements"
  
- 
- 
- 
+remove :: [String] -> IO ()
+remove [fileName, numberString] = do
+ contents <- readFile fileName
+ let todoTasks = lines contents
+     number = read numberString
+     newTodoItems = unlines $ delete (todoTasks !! number) todoTasks
+ bracketOnError (openTempFile "." "temp")
+  (\(tempName, tempHandle) -> do
+        hClose tempHandle
+        removeFile tempName) 
+  (\(tempName, tempHandle) -> do
+        hPutStr tempHandle newTodoItems
+        hClose tempHandle
+        removeFile fileName
+        renameFile tempName fileName)
+remove _ = putStrLn "Command ADD has only two argements"
+
+bump :: [String] -> IO ()
+bump [fileName, numberString] = do
+ contents <- readFile fileName
+ let todoTasks = lines contents
+     number = read numberString
+     upItem = todoTasks !! number
+     newTodoItems = unlines (upItem : (delete upItem todoTasks))
+ bracketOnError (openTempFile "." "temp")
+  (\(tempName, tempHandle) -> do
+        hClose tempHandle
+        removeFile tempName) 
+  (\(tempName, tempHandle) -> do
+        hPutStr tempHandle newTodoItems
+        hClose tempHandle
+        removeFile fileName
+        renameFile tempName fileName)
+bump _ = putStrLn "Command ADD has only two argements"
 
 
 

@@ -2,6 +2,7 @@ import Data.Char
 import Data.List
 import qualified Data.Map as Map
 import Text.Read (readMaybe)
+import System.Random
 
 import qualified Geometry.Sphere as Sphere 
 import qualified Geometry.Cuboid as Cuboid 
@@ -493,29 +494,13 @@ instance Tofu Frank where
 ---------------------- 8. ВВОД-ВЫВОД
 -----------------------9. Файлы и потоки
 
-
---------------------Merged String Checker
-isMerge :: String -> String -> String -> String
-isMerge s part1 part2 = check part1 part2 
- where
-  check :: String -> String -> String
-  check [] []         = []
-  check x  []         = [] ++ x
-  check []  y         = [] ++ y
-  check (x:xs) (y:ys) = x: y : (check xs ys) 
-
----------------------Equal Sides Of An Array
-
-findEvenIndex :: [Int] -> Int
-findEvenIndex arr =  check arr 0 0
- where
-  check []     left i | left == 0 = i 
-                      | otherwise = (-1)
-  check (x:xs) left i | left == sum xs = i
-                      | otherwise = check xs (left + x) (i+1)
-
-
-
+threeCoins :: StdGen -> (Bool, Bool, Bool)
+threeCoins gen =
+ let 
+  (firstCoin, newGen) = random gen
+  (secondCoin, newGen') = random newGen
+  (thirdCoin, newGen'') = random newGen'
+ in (firstCoin, secondCoin, thirdCoin)
 
 
 
