@@ -5,6 +5,7 @@ import System.IO
 import System.Directory
 import System.Environment 
 import Data.List
+import qualified Data.ByteString.Lazy as B
 
 
 {-main = do
@@ -96,7 +97,7 @@ isPal x = x == reverse x-}
         renameFile tempName "todo.txt"
         putStrLn ("Deleted: " ++ (todoTasks !! number))) -}
 
-dispatch :: String -> [String] -> IO () 
+{-dispatch :: String -> [String] -> IO () 
 dispatch "add"    = add 
 dispatch "view"   = view
 dispatch "remove" = remove
@@ -159,10 +160,46 @@ bump [fileName, numberString] = do
         hClose tempHandle
         removeFile fileName
         renameFile tempName fileName)
-bump _ = putStrLn "Command ADD has only two argements"
+bump _ = putStrLn "Command ADD has only two argements" -}
 
+{-main = do 
+ (fileName1:fileName2:_) <- getArgs 
+ copy fileName1 fileName2
 
+copy :: FilePath -> FilePath -> IO ()
+copy source dest = do
+ contents <- B.readFile source
+ bracketOnError
+   (openTempFile "." "temp")
+   (\(tn, th) -> do
+     hClose th
+     removeFile tn)
+   (\(tn, th) -> do
+     B.hPutStr th contents
+     hClose th
+     renameFile tn dest)-}
+ 
+--------------------Exception
 
+params :: [String] -> (Integer, Integer)
+params [a,b] = (read a, read b)
+
+printQuotients :: Integer -> Integer -> IO ()
+printQuotients a b = do
+ print $ a `divMod` b
+ print $ b `divMod` a
+
+main = do 
+  args <- getArgs  
+  let (a,b) = params args
+  res <- try (printQuotients a b) :: IO (Either ArithException ())
+  case res of
+    Left e -> putStrLn "Div zerro!"
+    Right () -> putStrLn "OK"
+  putStrLn "End of programm"
+  
+  
+  
 
 
 
