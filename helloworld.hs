@@ -2,10 +2,12 @@ import Data.Char
 import Control.Monad
 import Control.Exception
 import System.IO
+import System.IO.Error
 import System.Directory
 import System.Environment 
 import Data.List
 import qualified Data.ByteString.Lazy as B
+import Prelude hiding (catch)
 
 
 {-main = do
@@ -181,7 +183,7 @@ copy source dest = do
  
 --------------------Exception
 
-params :: [String] -> (Integer, Integer)
+{-params :: [String] -> (Integer, Integer)
 params [a,b] = (read a, read b)
 
 printQuotients :: Integer -> Integer -> IO ()
@@ -196,11 +198,64 @@ main = do
   case res of
     Left e -> putStrLn "Div zerro!"
     Right () -> putStrLn "OK"
-  putStrLn "End of programm"
-  
-  
-  
+  putStrLn "End of programm"-}
 
+{-
+params :: [String] -> (Integer, Integer)
+params [a,b] = (read a, read b)
+
+printQuotients :: Integer -> Integer -> IO ()
+printQuotients a b = do
+ print $ a `divMod` b
+ print $ b `divMod` a
+
+mainAction :: [String] -> IO ()
+mainAction args = do
+ let (a, b) = params args
+ printQuotients a b
+  
+main = do
+ args <- getArgs
+ mainAction args `catches` [Handler handleArith,
+                            Handler handleArgs,
+                            Handler handleOthers]
+ putStrLn "END"  
+  
+handleArith :: ArithException -> IO ()
+handleArith _ = putStrLn "Div zerro"
+
+handleArgs :: PatternMatchFail -> IO ()
+handleArgs _ = putStrLn "Wrong params"
+
+handleOthers :: SomeException -> IO ()
+handleOthers e = putStrLn $ "unnowns error: " ++ show e -}
+
+{-main = do
+ (fn:_) <- getArgs
+ fileExist <- doesFileExist fn
+ if fileExist 
+    then do
+    contents <- readFile fn
+    putStrLn $ "In this file " ++ show (length (lines contents)) ++ " lines."
+    else putStrLn "File do not exist." -}
+
+main = do
+ (fn:_) <- getArgs
+ countLines fn `catch` handler
+
+handler :: IOException -> IO ()
+handler e | isDoesNotExistError e =
+               case ioeGetFileName e of
+                 Just fn -> putStrLn $ "File " ++ fn ++ " does not exist"
+                 Nothing -> putStrLn "File does not exist"
+          | otherwise = ioError e
+ where
+  fn = ioeGetFileName e
+
+countLines :: String -> IO ()
+countLines fn = do
+ contents <- readFile fn
+ putStrLn $ "In this file " ++ show (length (lines contents)) ++ " lines."
 
 
 
