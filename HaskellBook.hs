@@ -516,13 +516,54 @@ finiteRandoms n gen =
    (restOfList, finalGen) = finiteRandoms (n-1) newGen
   in (value:restOfList, finalGen)
 
+--------------------10. РЕШЕНИЕ ЗАДАЧ В ФУНКЦИОНАЛЬНОМ СТИЛЕ
 
+solveRPN :: String -> Double
+solveRPN = head . foldl f [] . words
+ where
+  f (x:y:ys) "*" = (x *  y):ys
+  f (x:y:ys) "+" = (x +  y):ys
+  f (x:y:ys) "-" = (y -  x):ys
+  f (x:y:ys) "/" = (y /  x):ys
+  f (x:y:ys) "^" = (y ** x):ys
+  f (x:xs)  "ln" =   log x :xs
+  f  xs    "sum" = [sum xs]
+  f  xs       n  = read  n :xs  
 
+----------------------------
 
+data Section = Section { getA :: Int,
+                         getB :: Int,
+                         hetC :: Int } deriving (Show)
 
+type RoadSystem = [Section]
 
+heathrowToLondon :: RoadSystem
+heathrowToLondon = [ Section 50 10 30
+                   , Section  5 90 20
+                   , Section 40  2 25
+                   , Section 10  8  0 ]
 
+data Label = A | B | C deriving (Show)
+type Path  = [(Label, Int)]
 
+--optimalPath :: RoadSystem -> Path
+
+roadStep :: (Path, Path) -> Section -> (Path, Path)
+roadStep (pathA, pathB) (Section a b c) = 
+  let timeA = sum $ map snd pathA
+      timeB = sum $ map snd pathB
+      forwardTimeToA = timeA + a
+      crossssTimeToA = timeB + b + c
+      forwardTimeToB = timeB + b
+      crossssTimeToB = timeA + a + c
+      newPathToA = if forwardTimeToA <= crossssTimeToA
+                      then       (A,a):pathA
+                      else (C,c):(B,b):pathB
+      newPathToB = if forwardTimeToB <= crossssTimeToB
+                      then       (B,b):pathB
+                      else (C,c):(A,a):pathA
+  in (newPathToA, newPathToB)
 
 
 

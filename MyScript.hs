@@ -1116,9 +1116,15 @@ findEvenIndex arr =  check arr 0 0
   check (x:xs) left i | left == sum xs = i
                       | otherwise = check xs (left + x) (i+1) 
 
+----------------------Simple prime streaming
 
+solve :: Int -> Int -> String 
+solve a b = drop a $ take (a+b) $ concatMap show $ filter simpleNumber2 [2..]
 
-
+simpleNumber2 :: Integer -> Bool
+simpleNumber2 x = not . elem 0 $ map (mod x) [2..k]
+ where 
+  k = truncate . sqrt $ fromIntegral x
 
 
 
