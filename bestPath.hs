@@ -1,8 +1,3 @@
-﻿import Data.List
-import System.IO
-import System.Directory
-import System.Environment 
-
 
 data Section = Section { getA :: Int,
                          getB :: Int,
@@ -56,8 +51,9 @@ main = do
       path = optimalPath roadSystem
       pathString = concat $ map (show. fst) path
       pathTime = sum $ map snd path
-  putStrLn $ "Brst path: " ++ pathString
+  putStrLn $ "Best path: " ++ pathString
   putStrLn $ "Time: " ++ show pathTime
+
 
 
 
