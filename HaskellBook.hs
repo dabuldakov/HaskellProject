@@ -8,6 +8,8 @@ import qualified Geometry.Sphere as Sphere
 import qualified Geometry.Cuboid as Cuboid 
 import qualified Geometry.Cube as Cube
 
+import Control.Applicative
+
 
 
 doubleMe' x = x + x 
@@ -530,13 +532,19 @@ solveRPN = head . foldl f [] . words
   f  xs    "sum" = [sum xs]
   f  xs       n  = read  n :xs  
 
----------------------------- 11. 
+---------------------------- 11. ФУНКТОРЫ
 
+data CMaybe a = CNothing | CJust Int a deriving (Show)
 
+instance Functor CMaybe where
+ fmap f CNothing = CNothing
+ fmap f (CJust counter x) = CJust (counter+1) (f x)
 
+sequenceA' :: (Applicative f) => [f a] -> f [a]
+sequenceA' [] = pure []
+sequenceA' (x:xs) = (:) <$> x <*> sequenceA' xs
 
-
-
-
+sequenceA'' :: (Applicative f) => [f a] -> f [a]
+sequenceA'' = foldr (liftA2 (:)) (pure [])
 
 
