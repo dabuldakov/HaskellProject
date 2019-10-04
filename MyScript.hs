@@ -1126,14 +1126,25 @@ simpleNumber2 x = not . elem 0 $ map (mod x) [2..k]
  where 
   k = truncate . sqrt $ fromIntegral x
 
+---------------------How many days are we represented in a foreign country?
 
+daysRepresented :: [(Int,Int)] -> Int
+daysRepresented = length . nub . foldl (\acc (x,y) -> acc ++ [x..y]) []
 
+daysRepresented' :: [(Int,Int)] -> Int
+daysRepresented' =  length . nub . concatMap (\(b, e) -> [b..e])
 
+--------------------Cycle a list of values
 
+data Direction = L | R deriving (Show)
 
+instance Eq Direction where
+ L == L = True
+ R == R = True
+ _ == _ = False
 
-
-
+cycleList :: (Eq a) => Direction -> [a] -> a -> Maybe a
+cycleList d list p = if d == R then Just p else fmap (+1) (Just p)
 
 
 
