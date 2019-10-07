@@ -8,8 +8,9 @@ combinations n xs = sort $ nub $ map (sort. take n)  (permutations xs)
 
 combinations' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
 combinations' n l | (length l) == n = []
-                  | otherwise       = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l)
+                  | otherwise       = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) 1
  where
-  check a  [] last   |  combinations' n (tail l)
-  check a  [] last   = check (take (n-2) l) (drop (n-1) last
-  check a (b:bs) last = [a ++ [b]] ++ (check a bs last)
+  check a  [] last  k | (n-k) == 1 =  combinations' n (tail l)
+  check a  bs  last k |  ==                    | 
+  check a  [] last  k = check (take (n-k) ++ [(head last) l)] (init last) (init last) k
+  check a (b:bs) last k = [a ++ [b]] ++ (check a bs last k)
