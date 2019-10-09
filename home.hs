@@ -22,11 +22,13 @@ combinations' n l = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) 1
   check a (b:bs) las k = [a ++ [b]] ++ (check a bs las k) -}
 
 combinations' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
-combinations' n l = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) 1
+combinations' n l = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) (n-2)
  where
   check a []     []  k | k == (n-2) = combinations' n (tail l)
-  check a []     []  k = let las = drop (k+n) l in check ((take (n-(k+2)) a) ++ (take (k+1) las)) las las (k+1)
-  check a []     las k = check ((take (n-(k+1)) a) ++ (take k las)) (drop k las) (drop k las) k
+  check a []     []  k = let las = drop (k+n) l in check (init a ++ (take (k+1) las)) las las (k+1)
+  check a []     las k = check ((init a) ++ [head las]) (tail las)  (tail las) k
   check a (b:bs) las k = [a ++ [b]] ++ (check a bs las k)
 
+combinations'' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
+combinations'' n xs = sort $ map sort $ map (map (snd)) $ nub $ map (sort. take n)  (permutations (zip [1..] xs))
 
