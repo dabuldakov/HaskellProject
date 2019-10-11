@@ -146,8 +146,26 @@ zxc!
  [4,6,7,8,9],
  [5,6,7,8,9]]
 
+Node 5 
+  (Node 3 
+          (Node 1 EmptyTree EmptyTree) 
+          (Node 4 EmptyTree EmptyTree)
+   ) 
+  (Node 7 
+          (Node 6 EmptyTree EmptyTree) 
+          (Node 8 EmptyTree EmptyTree)
+   )
 
-
+Node (5,"FIVE") 
+   (Node (3,"tree") 
+           (Node (1,"one") EmptyTree EmptyTree)
+           (Node (4,"four") EmptyTree EmptyTree)
+ ) (Node (7,"seven") 
+            (Node (6,"SIX") EmptyTree EmptyTree) 
+            (Node (8,"eith") EmptyTree 
+                            (Node (10,"TENN!!!")
+                                             EmptyTree 
+                                             (Node (12,"twelv") EmptyTree EmptyTree))))
 
 
 

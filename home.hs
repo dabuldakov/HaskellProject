@@ -32,3 +32,28 @@ combinations' n l = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) (n-2)
 combinations'' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
 combinations'' n xs = sort $ map sort $ map (map (snd)) $ nub $ map (sort. take n)  (permutations (zip [1..] xs))
 
+
+combinat n 0 prefix = prefix
+combinat n m prefix = map (\a -> combinat n (m-1) (prefix ++ [a])) n 
+
+---------------------
+
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
+
+singleton :: a -> Tree a
+singleton x = Node x EmptyTree EmptyTree
+
+treeInsert :: (Ord a) => (a,b) -> Tree (a,b) -> Tree (a,b)
+treeInsert x EmptyTree = singleton x
+treeInsert (x,y) (Node (a,b) left right)
+ | x == a = Node (x,y) left right
+ | x < a = Node (a,b) (treeInsert (x,y) left) right
+ | x > a = Node (a,b) left (treeInsert (x,y) right)
+
+treeElem :: (Ord a) => a -> Tree (a,b) -> Maybe (a,b)
+treeElem x EmptyTree = Nothing
+treeElem x (Node (a,b) left right)
+ | x == a = Just (a,b)
+ | x < a = treeElem x left
+ | x > a = treeElem x right
+
