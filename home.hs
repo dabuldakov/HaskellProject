@@ -33,9 +33,11 @@ combinations'' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
 combinations'' n xs = sort $ map sort $ map (map (snd)) $ nub $ map (sort. take n)  (permutations (zip [1..] xs))
 
 
-combinat n 0 prefix = prefix
-combinat n m prefix = map (\a -> combinat n (m-1) (prefix ++ [a])) n 
-
+combinat 0 p = p
+combinat n p = do 
+ combinat (n-1) (p ++ ['a'])
+ combinat (n-1) (p ++ ['o'])
+ combinat (n-1) (p ++ ['y'])
 ---------------------
 
 data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
