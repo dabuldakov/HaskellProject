@@ -32,14 +32,15 @@ combinations' n l = check (take (n-1) l) (drop (n-1) l) (drop (n-1) l) (n-2)
 combinations'' :: (Eq a, Ord a) => Int -> [a] -> [[a]]
 combinations'' n xs = sort $ map sort $ map (map (snd)) $ nub $ map (sort. take n)  (permutations (zip [1..] xs))
 
---combinatTest :: Int -> [String] -> [String]
+
 combinatTest x = combinat x []
  where 
   combinat 0 p = putStrLn $ show p
   combinat n p = do 
-      combinat (n-1) (p ++ [1])
-      combinat (n-1) (p ++ [2])
-      combinat (n-1) (p ++ [3])
+      combinat (n-1) (p ++ ['a'])
+      combinat (n-1) (p ++ ['o'])
+      combinat (n-1) (p ++ ['y'])
+
 
 ---------------------
 
