@@ -42,7 +42,6 @@ combinatTest x = combinat x []
       combinat (n-1) (p ++ ['y'])
 
 
-
 ---------------------
 
 data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
