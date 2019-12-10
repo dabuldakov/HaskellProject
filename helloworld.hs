@@ -256,6 +256,9 @@ countLines :: String -> IO ()
 countLines fn = do
  contents <- readFile fn
  putStrLn $ "In this file " ++ show (length (lines contents)) ++ " lines."
+ 
+ 
+ --asdasd
 
 
 
