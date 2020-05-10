@@ -243,6 +243,7 @@ main = do
  (fn:_) <- getArgs
  countLines fn `catch` handler
 
+
 handler :: IOException -> IO ()
 handler e | isDoesNotExistError e =
                case ioeGetFileName e of
@@ -251,6 +252,7 @@ handler e | isDoesNotExistError e =
           | otherwise = ioError e
  where
   fn = ioeGetFileName e
+
 
 countLines :: String -> IO ()
 countLines fn = do
